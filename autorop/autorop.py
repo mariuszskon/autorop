@@ -103,3 +103,8 @@ def pipeline(state: PwnState, *funcs: Callable[[PwnState], PwnState]) -> PwnStat
             return func(state)
 
         return reduce(reducer, funcs, state)
+
+
+def classic(state: PwnState) -> PwnState:
+    """Perform an attack against a non-PIE buffer-overflowable binary."""
+    return pipeline(state, bof_corefile, leak_puts)
