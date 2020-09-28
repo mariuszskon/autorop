@@ -2,7 +2,7 @@
 # autorop - automated solver of classic CTF pwn challenges, with flexibility in mind
 
 from pwn import *
-from autorop.PwnState import PwnState
+from autorop import PwnState
 
 if __name__ == "__main__":
     print("TODO")
