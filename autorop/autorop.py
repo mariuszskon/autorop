@@ -51,7 +51,7 @@ def util_debug_requests(r: requests.Response) -> None:
 
 def util_call_overwriter(state: PwnState, data: bytes) -> None:
     """Call `state.overwriter`, logging as necessary."""
-    log.info(data)
+    log.debug(data)
     assert state.overwriter is not None  # make mypy happy
     state.overwriter(state.target, data)
 
@@ -125,7 +125,7 @@ def libc_rip(state: PwnState) -> PwnState:
     r = requests.post(URL, json={"symbols": formatted_leaks})
     util_debug_requests(r)
     json = r.json()
-    log.info(json)
+    log.debug(json)
     if len(json) == 0:
         log.error("could not find any matching libc!")
     if len(json) > 1:
