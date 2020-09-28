@@ -1,1 +1,1 @@
-from autorop.libc.rip import rip
+from autorop.libc.rip import rip as rip

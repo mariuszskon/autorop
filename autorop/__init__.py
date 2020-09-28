@@ -1,7 +1,7 @@
 from pwn import *
-from autorop.PwnState import PwnState
-from autorop.pipeline import pipeline
-import autorop.constants as constants
+from autorop.toplevel.PwnState import PwnState as PwnState
+from autorop.toplevel.pipeline import pipeline as pipeline
+import autorop.toplevel.constants as constants
 from autorop import constants
 from autorop import bof
 from autorop import call

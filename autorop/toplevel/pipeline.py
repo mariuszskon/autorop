@@ -1,4 +1,4 @@
-from autorop.PwnState import PwnState
+from autorop import PwnState
 from pwn import log
 from pwn import context
 from functools import reduce
