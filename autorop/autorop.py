@@ -34,6 +34,9 @@ class PwnState:
         context.binary = self.binary_name  # set architecture etc. automagically
         context.cyclic_size = context.bits / 8
 
+    def __repr__(self) -> str:
+        return f"<PwnState {str(vars(self))}>"
+
 
 def util_addressify(data: bytes) -> int:
     """Produce the address from a data leak."""
