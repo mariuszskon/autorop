@@ -1,6 +1,8 @@
 from autorop import *
+from flaky import flaky
 
 
+@flaky(max_runs=3)
 def test_return_to_what():
     BIN = "./tests/ductf_2020/return-to-what"
     s = PwnState(BIN, process(BIN))
