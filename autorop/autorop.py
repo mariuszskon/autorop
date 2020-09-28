@@ -51,7 +51,6 @@ def util_debug_requests(r: requests.Response) -> None:
 
 def util_call_overwriter(state: PwnState, data: bytes) -> None:
     """Call `state.overwriter`, logging as necessary."""
-    log.debug(data)
     assert state.overwriter is not None  # make mypy happy
     state.overwriter(state.target, data)
 
