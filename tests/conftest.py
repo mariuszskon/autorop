@@ -17,6 +17,20 @@ def exploit_local():
     wrapper[0].target.close()
 
 
+@pytest.fixture
+def exploit_remote():
+    """Fixture for exploiting a binary remotely."""
+    # somewhat hacky code to allow us to easily pass a parameter
+    wrapper = []
+
+    def inner(binary, host, port):
+        wrapper.append(PwnState(binary, connect(host, port)))
+        return wrapper[0]
+
+    yield inner
+    wrapper[0].target.close()
+
+
 def have_shell(tube):
     """Cheks if the given tube is a shell, using a simple heuristic."""
     tube.clean(1)  # clean excess output
