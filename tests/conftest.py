@@ -4,27 +4,13 @@ import pytest
 
 
 @pytest.fixture
-def exploit_local():
-    """Fixture for running a binary locally."""
+def exploit():
+    """Fixture for testing a local binary running through a `tube`."""
     # somewhat hacky code to allow us to easily pass a parameter
     wrapper = []
 
-    def inner(binary):
-        wrapper.append(PwnState(binary, process(binary)))
-        return wrapper[0]
-
-    yield inner
-    wrapper[0].target.close()
-
-
-@pytest.fixture
-def exploit_remote():
-    """Fixture for exploiting a binary remotely."""
-    # somewhat hacky code to allow us to easily pass a parameter
-    wrapper = []
-
-    def inner(binary, host, port):
-        wrapper.append(PwnState(binary, connect(host, port)))
+    def inner(binary, tube):
+        wrapper.append(PwnState(binary, tube))
         return wrapper[0]
 
     yield inner
