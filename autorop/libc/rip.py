@@ -5,12 +5,24 @@ from typing import Dict
 
 
 def rip(state: PwnState) -> PwnState:
-    """Acquire libc version using libc.rip.
+    """Acquire libc version using https://libc.rip.
 
-    We can programmatically find and download libc based on leaks
+    We can programmatically find and download libc based on function address leaks
     (two or more preferred). This function sets `state.libc`, including setting
     `state.libc.address` for ready-to-use address calculation.
-    We expect some leaks in `state.leaks` beforehand."""
+
+    Arguments:
+        state: The current `PwnState` with the following set:
+
+            leaks: Leaked symbols of libc.
+
+    Returns:
+        Reference to the mutated `PwnState`, with the following updated:
+
+            libc: `ELF` of `target`'s libc, according to https://libc.rip.
+                  `state.libc.address` is also set based on one of the leaks
+                  and its position in the downloaded libc.
+    """
     URL = "https://libc.rip/api/find"
     LIBC_FILE = ".autorop.libc"
     formatted_leaks: Dict[str, str] = {}

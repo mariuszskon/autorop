@@ -3,12 +3,34 @@ from pwn import tube, process, cyclic, cyclic_find, log, pack
 
 
 def corefile(state: PwnState) -> PwnState:
-    """Find the offset to the return address via buffer overflow.
+    """Find offset to the return address via buffer overflow using corefile.
 
     This function not only finds the offset from the input to the return address
-    on the stack, but also sets `overwriter` to be a function that correctly
-    overwrites starting at the return address"""
+    on the stack, but also sets `stack.overwriter` to be a function that correctly
+    overwrites starting at the return address.
+
+    You can avoid active corefile generation by setting `stack.bof_ret_offset`
+    yourself - in this case, the `stack.overwriter` is set appropriately.
+
+    Arguments:
+        state: The current `PwnState` with the following set:
+
+            binary_name: Path to binary.
+            bof_ret_offset: (optional) If not `None`,
+                            skips corefile generation step.
+
+    Returns:
+        Reference to the mutated `PwnState`, with the following updated:
+
+            bof_ret_offset: Updated if it was not set before.
+            overwriter: Is a simple function which sends a line
+                        of `bof_ret_offset` padding concatenated with
+                        the data given.
+    """
+    #: Number of bytes to send to attempt to trigger a segfault
+    #: for corefile generation.
     CYCLIC_SIZE = 1024
+
     if state.bof_ret_offset is None:
         # cause crash and find offset via corefile
         p: tube = process(state.binary_name)
