@@ -20,7 +20,7 @@ class PwnState:
 
         # set pwntools' context appropriately
         context.binary = self.binary_name  # set architecture etc. automagically
-        context.cyclic_size = context.bits / 8
+        context.cyclic_size = context.bytes
 
     def __repr__(self) -> str:
         return f"<PwnState {str(vars(self))}>"
