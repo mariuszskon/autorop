@@ -26,7 +26,7 @@ def puts(state: PwnState) -> PwnState:
     LEAK_FUNCS = ["__libc_start_main", "puts"]
 
     def leaker(rop: ROP, address: int) -> ROP:
-        rop.puts(address)
+        arutil.align_call(rop, "puts", [address])
         return rop
 
     return arutil.leak_helper(state, leaker, LEAK_FUNCS)

