@@ -6,11 +6,11 @@ def corefile(state: PwnState) -> PwnState:
     """Find offset to the return address via buffer overflow using corefile.
 
     This function not only finds the offset from the input to the return address
-    on the stack, but also sets ``stack.overwriter`` to be a function that correctly
+    on the stack, but also sets ``state.overwriter`` to be a function that correctly
     overwrites starting at the return address.
 
-    You can avoid active corefile generation by setting ``stack.bof_ret_offset``
-    yourself - in this case, the ``stack.overwriter`` is set appropriately.
+    You can avoid active corefile generation by setting ``state.bof_ret_offset``
+    yourself - in this case, the ``state.overwriter`` is set appropriately.
 
     Arguments:
         state: The current ``PwnState`` with the following set:
