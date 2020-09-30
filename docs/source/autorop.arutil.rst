@@ -28,6 +28,14 @@ autorop.arutil.debug\_requests module
    :undoc-members:
    :show-inheritance:
 
+autorop.arutil.leak\_helper module
+----------------------------------
+
+.. automodule:: autorop.arutil.leak_helper
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 autorop.arutil.pad\_rop module
 ------------------------------
 
