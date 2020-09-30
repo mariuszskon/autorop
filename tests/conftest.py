@@ -14,7 +14,10 @@ def exploit():
         return wrapper[0]
 
     yield inner
-    wrapper[0].target.close()
+    try:
+        wrapper[0].target.close()
+    except BrokenPipeError:
+        pass
 
 
 def have_shell(tube):
