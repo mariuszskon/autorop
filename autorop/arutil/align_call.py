@@ -3,7 +3,7 @@ from pwn import context, ROP, log, align, pack
 from typing import List
 
 
-def align_call(rop: ROP, func: str, args: List[str]) -> ROP:
+def align_call(rop: ROP, func: str, args: List[int]) -> ROP:
     """Align the stack prior to making a rop call to it.
 
     Arguments:
