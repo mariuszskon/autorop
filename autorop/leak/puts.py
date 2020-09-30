@@ -32,6 +32,7 @@ def puts(state: PwnState) -> PwnState:
 
     # ensure that call to vuln_function is stack-aligned
     # by aligning it minus one word
+    # TODO: refactor this for reusability for all rop function calls
     arutil.align_rop(
         rop,
         align(constants.STACK_ALIGNMENT, len(rop.chain())) // context.bytes - 1,
