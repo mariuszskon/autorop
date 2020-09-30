@@ -12,6 +12,14 @@ autorop.arutil.addressify module
    :undoc-members:
    :show-inheritance:
 
+autorop.arutil.align\_call module
+---------------------------------
+
+.. automodule:: autorop.arutil.align_call
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 autorop.arutil.align\_rop module
 --------------------------------
 
