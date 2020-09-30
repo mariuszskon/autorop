@@ -2,4 +2,4 @@
 
 black --check --diff --color . &&
     mypy -p autorop &&
-    pytest
+    pytest --reruns 3

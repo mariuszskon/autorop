@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install black mypy pytest flaky
+        pip install black mypy pytest pytest-rerunfailures
         pip install -r requirements.txt
         # install this as a package, to make pytest and python imports happy
         pip install .
@@ -36,4 +36,4 @@ jobs:
       env:
         TERM: xterm  # ensure pwntools import works
       run: |
-        pytest
+        pytest --reruns 3
