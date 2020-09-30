@@ -3,7 +3,7 @@ import requests
 
 
 def debug_requests(r: requests.Response) -> None:
-    """Print debugging information on a HTTP response made with `requests`.
+    """Print debugging information on a HTTP response made with ``requests``.
 
     Arguments:
         r: The response whose contents are to be logged.

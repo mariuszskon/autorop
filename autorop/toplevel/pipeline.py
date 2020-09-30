@@ -6,14 +6,14 @@ from typing import Callable
 
 
 def pipeline(state: PwnState, *funcs: Callable[[PwnState], PwnState]) -> PwnState:
-    """Put `PwnState` through a sequential "pipeline" of functions.
+    """Put ``PwnState`` through a sequential "pipeline" of functions.
 
     Arguments:
-        state: The `PwnState` to pass to the first function in `funcs`.
-        funcs: Functions which operate on the `PwnState` and return it.
+        state: The ``PwnState`` to pass to the first function in ``funcs``.
+        funcs: Functions which operate on the ``PwnState`` and return it.
 
     Returns:
-        The `PwnState` returned by the last function in `funcs`.
+        The ``PwnState`` returned by the last function in ``funcs``.
     """
 
     with log.progress("Pipeline") as progress:

@@ -6,7 +6,7 @@ class PwnState:
     """Class for keeping track of our exploit development."""
 
     def __init__(self, binary_name: str, target: tube, vuln_function: str = "main"):
-        """Initialise the `PwnState`.
+        """Initialise the ``PwnState``.
 
         Arguments:
             binary_name: Path to the binary to exploit
@@ -24,10 +24,10 @@ class PwnState:
         #: which we can return to repeatedly.
         self.vuln_function = vuln_function
 
-        #: pwntools `ELF` of `binary_name`.
+        #: pwntools ``ELF`` of ``binary_name``.
         self.elf: ELF = ELF(self.binary_name)
 
-        #: `ELF` of `target`'s libc.
+        #: ``ELF`` of ``target``'s libc.
         self.libc: Optional[ELF] = None
 
         #: Offset to return address via buffer overflow.
@@ -39,7 +39,7 @@ class PwnState:
         #: or it might need to do format string attacks
         self.overwriter: Optional[Callable[[tube, bytes], None]] = None
 
-        #: Leaked symbols of `libc`.
+        #: Leaked symbols of ``libc``.
         self.leaks: Dict[str, int] = {}
 
         # set pwntools' context appropriately
