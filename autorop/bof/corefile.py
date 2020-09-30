@@ -16,18 +16,16 @@ def corefile(state: PwnState) -> PwnState:
         state: The current ``PwnState`` with the following set
 
             - ``binary_name``: Path to binary.
-
             - ``bof_ret_offset``: (optional) If not ``None``,
               skips corefile generation step.
+            - ``overwriter``: Function which writes rop chain to the "right place".
 
     Returns:
         Reference to the mutated ``PwnState``, with the following updated
 
             - ``bof_ret_offset``: Updated if it was not set before.
-
-            - ``overwriter``: Is a simple function which sends a line
-              of ``bof_ret_offset`` padding concatenated with
-              the data given.
+            - ``overwriter``: Now calls the previous ``overwriter`` but with
+              ``bof_ret_offset`` padding bytes prepended to the data given.
     """
     #: Number of bytes to send to attempt to trigger a segfault
     #: for corefile generation.
@@ -43,9 +41,11 @@ def corefile(state: PwnState) -> PwnState:
         state.bof_ret_offset = cyclic_find(pack(fault))
     log.info("Offset to return address is " + str(state.bof_ret_offset))
 
+    old_overwriter = state.overwriter
+
     # define overwriter as expected - to write data starting at return address
     def overwriter(t: tube, data: bytes) -> None:
-        t.sendline(cyclic(state.bof_ret_offset) + data)
+        old_overwriter(t, cyclic(state.bof_ret_offset) + data)
 
     state.overwriter = overwriter
     return state

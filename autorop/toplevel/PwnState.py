@@ -1,5 +1,5 @@
 from pwn import context, tube, ELF
-from typing import Optional, Callable, Dict
+from typing import Optional, Callable, Dict, Any
 
 
 class PwnState:
@@ -40,8 +40,10 @@ class PwnState:
         #: Function which writes rop chain to the "right place"
         #: (usually return address)
         #: e.g. it might be as simple as prepending some padding,
-        #: or it might need to do format string attacks
-        self.overwriter: Optional[Callable[[tube, bytes], None]] = None
+        #: or it might need to do format string attacks.
+        #: By default ``t.sendline(data)``.
+        self.overwriter: Callable[[tube, bytes], Any]
+        self.overwriter = lambda t, data: t.sendline(data)
 
         #: Leaked symbols of ``libc``.
         self.leaks: Dict[str, int] = {}
