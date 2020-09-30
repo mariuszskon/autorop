@@ -9,15 +9,15 @@ def system_binsh(state: PwnState) -> PwnState:
     written by ``state.overwriter``.
 
     Arguments:
-        state: The current ``PwnState`` with the following set:
+        state: The current ``PwnState`` with the following set
 
-            target: What we want to exploit.
-            elf: pwntools ``ELF`` of ``state.binary_name``.
-            libc: ``ELF`` of ``target``'s libc, with ``state.libc.address``
-                  already set appropriately.
-            vuln_function: Name of vulnerable function in binary,
-                           which we can return to repeatedly.
-            overwriter: Function which writes rop chain to the "right place".
+            - ``target``: What we want to exploit.
+            - ``elf``: pwntools ``ELF`` of ``state.binary_name``.
+            - ``libc``: ``ELF`` of ``target``'s libc, with ``state.libc.address``
+              already set appropriately.
+            - ``vuln_function``: Name of vulnerable function in binary,
+              which we can return to repeatedly.
+            - ``overwriter``: Function which writes rop chain to the "right place".
 
     Returns:
         Reference to the mutated ``PwnState``, with no direct property updates.

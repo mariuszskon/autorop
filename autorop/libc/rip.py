@@ -12,16 +12,16 @@ def rip(state: PwnState) -> PwnState:
     ``state.libc.address`` for ready-to-use address calculation.
 
     Arguments:
-        state: The current ``PwnState`` with the following set:
+        state: The current ``PwnState`` with the following set
 
-            leaks: Leaked symbols of libc.
+            - ``leaks``: Leaked symbols of libc.
 
     Returns:
-        Reference to the mutated ``PwnState``, with the following updated:
+        Reference to the mutated ``PwnState``, with the following updated
 
-            libc: ``ELF`` of ``target``'s libc, according to https://libc.rip.
-                  ``state.libc.address`` is also set based on one of the leaks
-                  and its position in the downloaded libc.
+            - ``libc``: ``ELF`` of ``target``'s libc, according to https://libc.rip.
+              ``state.libc.address`` is also set based on one of the leaks
+              and its position in the downloaded libc.
     """
     URL = "https://libc.rip/api/find"
     LIBC_FILE = ".autorop.libc"

@@ -13,19 +13,21 @@ def corefile(state: PwnState) -> PwnState:
     yourself - in this case, the ``state.overwriter`` is set appropriately.
 
     Arguments:
-        state: The current ``PwnState`` with the following set:
+        state: The current ``PwnState`` with the following set
 
-            binary_name: Path to binary.
-            bof_ret_offset: (optional) If not ``None``,
-                            skips corefile generation step.
+            - ``binary_name``: Path to binary.
+
+            - ``bof_ret_offset``: (optional) If not ``None``,
+              skips corefile generation step.
 
     Returns:
-        Reference to the mutated ``PwnState``, with the following updated:
+        Reference to the mutated ``PwnState``, with the following updated
 
-            bof_ret_offset: Updated if it was not set before.
-            overwriter: Is a simple function which sends a line
-                        of ``bof_ret_offset`` padding concatenated with
-                        the data given.
+            - ``bof_ret_offset``: Updated if it was not set before.
+
+            - ``overwriter``: Is a simple function which sends a line
+              of ``bof_ret_offset`` padding concatenated with
+              the data given.
     """
     #: Number of bytes to send to attempt to trigger a segfault
     #: for corefile generation.
