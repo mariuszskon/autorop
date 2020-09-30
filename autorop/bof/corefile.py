@@ -34,7 +34,7 @@ def corefile(state: PwnState) -> PwnState:
     if state.bof_ret_offset is None:
         # cause crash and find offset via corefile
         p: tube = process(state.binary_name)
-        p.sendline(cyclic(CYCLIC_SIZE))
+        state.overwriter(p, cyclic(CYCLIC_SIZE))
         p.wait()
         fault: int = p.corefile.fault_addr
         log.info("Fault address @ " + hex(fault))
