@@ -1,5 +1,5 @@
 #!/bin/sh
 
 black --check --diff --color . &&
-    mypy -m autorop &&
+    mypy -p autorop &&
     pytest
