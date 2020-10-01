@@ -1,19 +1,39 @@
-from autorop import PwnState, pipeline, bof, leak, libc, call
+from autorop import PwnState, pipeline, bof, leak, libc, call, constants
 
 
-def classic(state: PwnState) -> PwnState:
-    """Perform an attack against a non-PIE/non-ASLR buffer-overflowable binary.
+def classic(
+    state: PwnState,
+    find: constants.TYPE_PIPE = bof.corefile,
+    leak: constants.TYPE_PIPE = leak.puts,
+    lookup: constants.TYPE_PIPE = libc.rip,
+    shell: constants.TYPE_PIPE = call.system_binsh,
+) -> PwnState:
+    """Perform a "classic" attack against a binary.
 
-    Launch a ret2libc attack against ``state.target``, assuming that
-    ``state.elf.address`` is set correctly (which it automatically is by pwntools
-    if it is not PIE or the process is not ASLR-ed, otherwise, you can set it
-    yourself beforehand).
-    The result is a shell on the ``target``.
+    Launch a find-leak-lookup-shell attack against a binary.
+    I made up this term.
+    But it is a common pattern in CTFs.
+
+    - Find: Find the vulnerability (e.g. how far we need to write to overwrite
+      return address due to a buffer overflow).
+    - Leak: Find out important stuff about our context (e.g. addresses of
+      symbols in libc, PIE offset, etc.).
+    - Lookup: Get data from elsewhere (e.g. download appropriate libc version).
+    - Shell: Spawn a shell (e.g. via ret2libc, or via syscall).
+
+    The default parameters perform a ret2libc attack on a non-PIE/non-ASLR target
+    (at most one of these is fine, but not both), leaking with ``puts``.
+    You can set ``state.elf.address`` yourself and it might work for PIE and ASLR.
+    We use https://libc.rip to find the libc, and then spawn a shell on the target.
 
     Arguments:
         state: The current ``PwnState``.
+        find: "Finder" of vulnerability. :mod:`autorop.bof` may be of interest.
+        leak: "Leaker". :mod:`autorop.leak` may be of interest.
+        lookup: "Lookup-er" of info. :mod:`autorop.libc` may be of interest.
+        shell: Spawner of shell. :mod:`autorop.call` may be of interest.
 
     Returns:
         Reference to the mutated ``PwnState``.
     """
-    return pipeline(state, bof.corefile, leak.puts, libc.rip, call.system_binsh)
+    return pipeline(state, find, leak, lookup, shell)
