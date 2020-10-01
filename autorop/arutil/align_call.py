@@ -28,15 +28,11 @@ def align_call(rop: ROP, func: str, args: List[int]) -> ROP:
     # ensure that call is stack-aligned
     # by padding up to it minus the number of words up to and including
     # the actual function call
-    arutil.align_rop(
-        rop,
-        (
-            align(constants.STACK_ALIGNMENT, len(rop.chain()) + index)
-            + constants.STACK_ALIGNMENT
-        )
-        // context.bytes
-        - 1,
-    )
+    current_length = len(rop.chain()) + index
+    alignment = (
+        align(constants.STACK_ALIGNMENT, current_length) + constants.STACK_ALIGNMENT
+    ) // context.bytes - 1
+    arutil.align_rop(rop, alignment)
 
     # actually perform the function call
     rop.call(func, args)
