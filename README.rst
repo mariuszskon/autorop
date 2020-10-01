@@ -1,6 +1,8 @@
 autorop
 =======
 
+|Test status| |MIT license|
+
 Automated solver of classic CTF pwn challenges, with flexibility in mind.
 
 Disclaimer
@@ -84,3 +86,9 @@ See how the below example neatly manages to "downgrade" the problem from somethi
 
     # switch to interactive shell which we got via the exploit
     result.target.interactive()
+
+.. |Test status| image:: https://github.com/mariuszskon/autorop/workflows/autorop%20test/badge.svg
+    :target: https://github.com/mariuszskon/autorop/actions?query=workflow%3A%22autorop+test%22
+
+.. |MIT license| image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :target: https://github.com/mariuszskon/autorop/blob/master/LICENSE
