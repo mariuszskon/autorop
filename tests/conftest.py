@@ -24,4 +24,8 @@ def have_shell(tube):
     """Cheks if the given tube is a shell, using a simple heuristic."""
     tube.clean(1)  # clean excess output
     tube.sendline("echo $0")
-    return tube.readline() == b"/bin/sh\n"
+    line = tube.readline()
+    rest = tube.clean(1)
+    log.debug(f"Shell response line: {line}")
+    log.debug(f"Rest: {rest}")
+    return line == b"/bin/sh\n"
