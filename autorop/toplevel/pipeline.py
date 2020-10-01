@@ -1,11 +1,12 @@
 from autorop import PwnState
+from . import constants
 from pwn import log
 from pwn import context
 from functools import reduce
 from typing import Callable, Tuple
 
 
-def pipeline(state: PwnState, *funcs: Callable[[PwnState], PwnState]) -> PwnState:
+def pipeline(state: PwnState, *funcs: constants.TYPE_PIPE) -> PwnState:
     """Put ``PwnState`` through a sequential "pipeline" of functions.
 
     Arguments:
@@ -16,9 +17,7 @@ def pipeline(state: PwnState, *funcs: Callable[[PwnState], PwnState]) -> PwnStat
         The ``PwnState`` returned by the last function in ``funcs``.
     """
 
-    def reducer(
-        state: PwnState, func: Tuple[int, Callable[[PwnState], PwnState]]
-    ) -> PwnState:
+    def reducer(state: PwnState, func: Tuple[int, constants.TYPE_PIPE]) -> PwnState:
         log.debug(state)
         log.info(f"Pipeline [{func[0]+1}/{len(funcs)}]: {func[1].__name__}")
         return func[1](state)
