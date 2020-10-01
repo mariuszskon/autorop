@@ -45,9 +45,9 @@ Command line
 API
 ---
 
-Importing autorop automatically does a ``from pwn import *``, so you can use all of `pwntools' goodies <https://docs.pwntools.com/en/latest/>`.
+Importing autorop automatically does a ``from pwn import *``, so you can use all of `pwntools' goodies <https://docs.pwntools.com/en/latest/>`_.
 
-Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`. Most functions take in a ``PwnState``, mutate it, and pass it on to the next function. This allows great simplicity and flexibility.
+Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`_. Most functions take in a ``PwnState``, mutate it, and pass it on to the next function. This allows great simplicity and flexibility.
 
 See how the below example neatly manages to "downgrade" the problem from something unique, to something generic that the ``classic_printf`` pipeline can handle.
 
