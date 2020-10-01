@@ -30,7 +30,11 @@ def align_call(rop: ROP, func: str, args: List[int]) -> ROP:
     # the actual function call
     arutil.align_rop(
         rop,
-        (align(constants.STACK_ALIGNMENT, len(rop.chain()) + index)) // context.bytes
+        (
+            align(constants.STACK_ALIGNMENT, len(rop.chain()) + index)
+            + constants.STACK_ALIGNMENT
+        )
+        // context.bytes
         - 1,
     )
 
