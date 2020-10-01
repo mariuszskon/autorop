@@ -3,6 +3,11 @@ autorop
 
 Automated solver of classic CTF pwn challenges, with flexibility in mind.
 
+Disclaimer
+----------
+
+Do not use this software for illegal purposes. This software is intended to be used in legal Capture the Flag competitions only.
+
 Command line
 ------------
 
