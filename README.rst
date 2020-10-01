@@ -1,9 +1,11 @@
 autorop
 =======
 
-|Test status| |MIT license|
+|docs| |Test status| |MIT license|
 
 Automated solver of classic CTF pwn challenges, with flexibility in mind.
+
+Official documentation can be found at `autorop.readthedocs.io <https://autorop.readthedocs.io>`_.
 
 Disclaimer
 ----------
@@ -86,6 +88,9 @@ See how the below example neatly manages to "downgrade" the problem from somethi
 
     # switch to interactive shell which we got via the exploit
     result.target.interactive()
+
+.. |docs| image:: https://readthedocs.org/projects/autorop/badge/
+    :target: https://autorop.readthedocs.io
 
 .. |Test status| image:: https://github.com/mariuszskon/autorop/workflows/autorop%20test/badge.svg
     :target: https://github.com/mariuszskon/autorop/actions?query=workflow%3A%22autorop+test%22
