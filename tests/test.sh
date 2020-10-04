@@ -2,4 +2,5 @@
 
 black --check --diff --color . &&
     mypy -p autorop &&
-    pytest --reruns 3
+    coverage run -m pytest --reruns 3 &&
+    coverage report
