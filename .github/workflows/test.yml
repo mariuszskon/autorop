@@ -41,7 +41,7 @@ jobs:
 
     - name: Install libc-database
       run: |
-        git clone https://github.com/niklasb/libc-database ~/.libc-database || git --git-dir ~/.libc-database/.git pull
+        git clone https://github.com/niklasb/libc-database ~/.libc-database || git -C ~/.libc-database pull origin master
         git -C ~/.libc-database checkout $(cat .libc-database-version)
         ~/.libc-database/get ubuntu
 
