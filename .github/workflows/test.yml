@@ -12,6 +12,7 @@ jobs:
           3.6,   # oldest python3 that receives security updates
           '3.x'  # latest stable python3
         ]
+      fail-fast: false  # do not stop other matrix jobs if one fails
 
     steps:
     - uses: actions/checkout@v2
