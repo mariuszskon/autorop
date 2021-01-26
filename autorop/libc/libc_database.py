@@ -33,7 +33,7 @@ def libc_database(state: PwnState) -> PwnState:
     log.info("Searching for libc based on leaks")
     command = [state.config["libc_database_path"] + "/find"] + flattened_args
     results = (
-        subprocess.run(command, check=True, capture_output=True)
+        subprocess.run(command, check=True, stdout=subprocess.PIPE)
         .stdout.decode("utf-8")
         .splitlines()
     )
