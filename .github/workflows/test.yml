@@ -56,7 +56,7 @@ jobs:
       env:
         TERM: xterm  # ensure pwntools import works
       run: |
-        coverage run -m pytest --reruns 3
+        coverage run -m pytest --reruns 5
 
     - name: Check if code coverage is sufficient
       run: |
