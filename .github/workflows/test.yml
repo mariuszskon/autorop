@@ -26,6 +26,8 @@ jobs:
         pip install -r requirements.txt
         # install this as a package, to make pytest and python imports happy
         pip install .
+        git clone https://github.com/niklasb/libc-database ~/.libc-database
+        ~/.libc-database/get ubuntu
     - name: Lint with black
       run: |
         black --check --diff --color .
