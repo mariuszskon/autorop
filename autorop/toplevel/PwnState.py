@@ -1,11 +1,18 @@
-from pwn import context, tube, ELF
+from pwn import context, tube, ELF, os
 from typing import Optional, Callable, Dict, Any
+from typing_extensions import TypedDict
 
 
 class PwnState:
     """Class for keeping track of our exploit development."""
 
-    def __init__(self, binary_name: str, target: tube, vuln_function: str = "main"):
+    def __init__(
+        self,
+        binary_name: str,
+        target: tube,
+        vuln_function: str = "main",
+        libc_database_path: str = "~/.libc-database",
+    ):
         """Initialise the ``PwnState``.
 
         This initialises the state with the given parameters and default values.
@@ -17,6 +24,7 @@ class PwnState:
             target: What we want to exploit (can be local, or remote)
             vuln_function: Name of vulnerable function in binary,
                            which we can return to repeatedly
+            libc_database_path: Path to local installation of `libc-database <https://github.com/niklasb/libc-database>`_, if using it.
         """
         #: Path to the binary to exploit.
         self.binary_name: str = binary_name
@@ -47,6 +55,12 @@ class PwnState:
 
         #: Leaked symbols of ``libc``.
         self.leaks: Dict[str, int] = {}
+
+        #: Miscellaneous configurations, with sane defaults.
+        PwnStateConfig = TypedDict("PwnStateConfig", {"libc_database_path": str})
+        self.config: PwnStateConfig = {
+            "libc_database_path": os.path.expanduser(libc_database_path)
+        }
 
         # set pwntools' context appropriately
         context.binary = self.binary_name  # set architecture etc. automagically
