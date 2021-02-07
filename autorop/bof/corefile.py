@@ -41,6 +41,9 @@ def corefile(state: PwnState) -> PwnState:
         state.bof_ret_offset = cyclic_find(pack(fault))
     log.info("Offset to return address is " + str(state.bof_ret_offset))
 
+    if state.bof_ret_offset < 0:
+        log.error(f"Invalid offset to return addess ({state.bof_ret_offset})!")
+
     old_overwriter = state.overwriter
 
     # define overwriter as expected - to write data starting at return address
