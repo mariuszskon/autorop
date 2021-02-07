@@ -19,6 +19,9 @@ def exploit():
     except BrokenPipeError:
         pass
 
+    # remove corefiles to prevent pwntools from getting lost later
+    os.system("rm core.*")
+
 
 def have_shell(tube):
     """Cheks if the given tube is a shell, using a simple heuristic."""
