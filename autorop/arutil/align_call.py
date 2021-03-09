@@ -25,14 +25,16 @@ def align_call(rop: ROP, func: str, args: List[int]) -> ROP:
     index: int = predict_rop.chain().index(pack(rop.resolve(func)))
     log.debug(f"Offset till function call: {index}")
 
-    # ensure that call is stack-aligned
-    # by padding up to it minus the number of words up to and including
-    # the actual function call
+    # ensure that call is stack-aligned,
+    # assuming that we are already within a function (with the alignment invariant)
+    # by padding up to the call
     current_length = len(rop.chain()) + index
     alignment = (
         align(constants.STACK_ALIGNMENT, current_length) + constants.STACK_ALIGNMENT
     ) // context.bytes - 1
-    arutil.align_rop(rop, alignment)
+    # prevent excessive aligning
+    alignment %= constants.STACK_ALIGNMENT // context.bytes
+    arutil.align_rop(rop, len(rop.chain()) // context.bytes + alignment)
 
     # actually perform the function call
     rop.call(func, args)
