@@ -8,57 +8,47 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [
-          3.6,   # oldest python3 that receives security updates
-          '3.x'  # latest stable python3
+        test-image: [
+          # ubuntu:16.04 has python 3.5, while some dependencies need >=3.6
+          'ubuntu:18.04',
+          'ubuntu:20.04',
+          'debian:10',
         ]
       fail-fast: false  # do not stop other matrix jobs if one fails
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
 
-    - name: Install python dependencies
+    - name: Free disk space
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r dev-requirements.txt
-        # install this as a package, to make pytest and python imports happy
-        pip install .
+        df -h
+        echo "Source: https://github.com/facebookresearch/wav2letter/commit/dee0b81895bc9254a463b19ef87d49f14dcb913a"
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        docker rmi $(docker image ls -aq)
+        echo "Source: https://github.com/easimon/maximize-build-space/blob/master/action.yml"
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /opt/ghc
+        df -h
 
-    - name: Install cached libc-database
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-libc-database
-      with:
-        path: ~/.libc-database
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('.libc-database-version') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ env.cache-name }}-
+    - uses: satackey/action-docker-layer-caching@v0.0.11
 
-    - name: Install libc-database
-      run: |
-        git clone https://github.com/niklasb/libc-database ~/.libc-database || git -C ~/.libc-database pull origin master
-        git -C ~/.libc-database checkout $(cat .libc-database-version)
-        ~/.libc-database/get ubuntu
+    - name: Set corefile configuration
+      run: sudo sysctl -w kernel.core_pattern="core.%p"
 
-    - name: Lint with black
-      run: |
-        black --check --diff --color .
+    - name: Build Docker image
+      run: cd ci/ && ./build.sh ${{ matrix.test-image }}
 
-    - name: Typecheck with mypy
-      run: |
-        mypy -p autorop
+    - name: Show versions
+      run: docker run --rm "autorop-test-${{ matrix.test-image }}" ./versions.sh
 
-    - name: Test with pytest
-      env:
-        TERM: xterm  # ensure pwntools import works
-      run: |
-        coverage run -m pytest --reruns 5
+    - name: Lint
+      run: docker run --rm "autorop-test-${{ matrix.test-image }}" ./lint.sh
 
-    - name: Check if code coverage is sufficient
-      run: |
-        coverage report
+    - name: Typecheck
+      run: docker run --rm "autorop-test-${{ matrix.test-image }}" ./typecheck.sh
+
+    - name: Run tests
+      run: docker run --rm "autorop-test-${{ matrix.test-image }}" ./test.sh
