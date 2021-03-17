@@ -83,8 +83,8 @@ See how the below example neatly manages to "downgrade" the problem from somethi
     # create a starting state
     s = PwnState(BIN, process(BIN))
 
-    # build a custom pipeline, connecting it to the classic_printf pipeline
-    result = pipeline(s, set_overwriter, turnkey.classic_printf)
+    # build a custom pipeline - base classic pipeline, with printf for leaking
+    state = pipeline(s, set_overwriter, turnkey.classic(leak=leak.printf))
 
     # switch to interactive shell which we got via the exploit
     result.target.interactive()

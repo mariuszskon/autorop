@@ -24,7 +24,7 @@ def test_stop(exploit):
     # create a starting state - modified to use fixture
     s = exploit(BIN, process(BIN))
 
-    # build a custom pipeline, connecting it to the classic_printf pipeline
-    state = pipeline(s, set_overwriter, turnkey.classic_printf)
+    # build a custom pipeline - base classic pipeline, with printf for leaking
+    state = pipeline(s, set_overwriter, turnkey.classic(leak=leak.printf))
 
     assert have_shell(state.target)

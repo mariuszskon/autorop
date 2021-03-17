@@ -17,5 +17,5 @@ if __name__ == "__main__":
         print("Usage: autorop BINARY [HOST IP]")
         exit()
 
-    result = turnkey.classic(state)
+    result = turnkey.classic()(state)
     result.target.interactive()
