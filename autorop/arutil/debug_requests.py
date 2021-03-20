@@ -8,7 +8,7 @@ def debug_requests(r: requests.Response) -> None:
     Arguments:
         r: The response whose contents are to be logged.
     """
-    log.debug(r.request.headers)
-    log.debug(r.request.body)
-    log.debug(r.headers)
-    # log.debug(r.content)  # often too big
+    log.debug(repr(r.request.headers))
+    log.debug(repr(r.request.body))
+    log.debug(repr(r.headers))
+    # log.debug(repr(r.content))  # often too big

@@ -37,7 +37,7 @@ def libc_database(state: PwnState) -> PwnState:
         .stdout.decode("utf-8")
         .splitlines()
     )
-    log.debug(results)
+    log.debug(repr(results))
     if len(results) == 0:
         log.error("could not find any matching libc!")
     if len(results) > 1:

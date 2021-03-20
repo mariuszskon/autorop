@@ -49,7 +49,7 @@ def leak_helper(
 
     for symbol in symbols:
         line = state.target.readline()
-        log.debug(line)
+        log.debug(line.hex())
         # remove last character which must be newline
         state.leaks[symbol] = arutil.addressify(line[:-1]) << (8 * offset)
         log.info(f"leaked {symbol} @ " + hex(state.leaks[symbol]))

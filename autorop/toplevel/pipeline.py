@@ -18,7 +18,7 @@ def pipeline(state: PwnState, *funcs: constants.TYPE_PIPE) -> PwnState:
     """
 
     def reducer(state: PwnState, func: Tuple[int, constants.TYPE_PIPE]) -> PwnState:
-        log.debug(state)
+        log.debug(repr(state))
         log.info(f"Pipeline [{func[0]+1}/{len(funcs)}]: {func[1].__name__}")
         return func[1](state)
 

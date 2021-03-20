@@ -33,7 +33,7 @@ def rip(state: PwnState) -> PwnState:
     r = requests.post(URL, json={"symbols": formatted_leaks})
     arutil.debug_requests(r)
     json = r.json()
-    log.debug(json)
+    log.debug(repr(json))
     if len(json) == 0:
         log.error("could not find any matching libc!")
     if len(json) > 1:
