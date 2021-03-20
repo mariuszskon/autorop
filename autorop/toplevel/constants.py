@@ -1,5 +1,9 @@
-from autorop import PwnState
 from typing import Callable
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from autorop import PwnState
 
 #: pwntools ``tube.clean(CLEAN_TIME)``, for removing excess output
 CLEAN_TIME = 1
@@ -12,4 +16,4 @@ STACK_ALIGNMENT = 16
 
 #: Type signature of things that can be treated as pipes
 #: i.e. parameters to pipelines, and pipelines themeselves
-TYPE_PIPE = Callable[[PwnState], PwnState]
+TYPE_PIPE = Callable[["PwnState"], "PwnState"]

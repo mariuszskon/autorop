@@ -18,10 +18,10 @@ Subpackages
 Submodules
 ----------
 
-autorop.autorop module
-----------------------
+autorop.cli module
+------------------
 
-.. automodule:: autorop.autorop
+.. automodule:: autorop.cli
    :members:
    :undoc-members:
    :show-inheritance:

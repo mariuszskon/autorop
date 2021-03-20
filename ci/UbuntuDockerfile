@@ -24,7 +24,5 @@ RUN rm -rf venv/
 RUN python3 -m venv venv
 # TODO: make a proper python package to clean this nonsense
 RUN . ./venv/bin/activate && \
-    pip install --upgrade pip && \
-    pip install -r requirements.txt && \
-    pip install -r dev-requirements.txt && \
+    pip install --upgrade pip black mypy pytest pytest-rerunfailures coverage && \
     pip install .
