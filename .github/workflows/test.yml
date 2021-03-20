@@ -29,8 +29,6 @@ jobs:
         docker rmi $(docker image ls -aq)
         echo "Source: https://github.com/easimon/maximize-build-space/blob/master/action.yml"
         sudo rm -rf /usr/share/dotnet
-        sudo rm -rf /usr/local/lib/android
-        sudo rm -rf /opt/ghc
         df -h
 
     - uses: satackey/action-docker-layer-caching@v0.0.11
