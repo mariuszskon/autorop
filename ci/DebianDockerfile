@@ -1,9 +1,9 @@
-ARG UBUNTU_IMAGE
+ARG DEBIAN_IMAGE
 ARG LIBC_DATABASE_IMAGE
 
 FROM $LIBC_DATABASE_IMAGE as libc-database-builder
 
-FROM $UBUNTU_IMAGE
+FROM $DEBIAN_IMAGE
 ENV DEBIAN_FRONTEND=noninteractive
 RUN dpkg --add-architecture i386
 RUN apt-get update && apt-get install -y \
