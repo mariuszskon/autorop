@@ -2,5 +2,5 @@
 
 set -e
 
-source ./venv/bin/activate
+source /home/venv/bin/activate
 mypy -p autorop

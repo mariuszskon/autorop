@@ -2,7 +2,7 @@
 
 set -e
 
-source ./venv/bin/activate
+source /home/venv/bin/activate
 uname -a
 sysctl kernel.core_pattern
 ldd --version | head -n 1
