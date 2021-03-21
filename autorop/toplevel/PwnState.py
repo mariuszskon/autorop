@@ -1,6 +1,5 @@
 from pwn import context, tube, ELF, os
 from typing import Optional, Callable, Dict, Any
-from typing_extensions import TypedDict
 
 
 class PwnState:
@@ -56,11 +55,8 @@ class PwnState:
         #: Leaked symbols of ``libc``.
         self.leaks: Dict[str, int] = {}
 
-        #: Miscellaneous configurations, with sane defaults.
-        PwnStateConfig = TypedDict("PwnStateConfig", {"libc_database_path": str})
-        self.config: PwnStateConfig = {
-            "libc_database_path": os.path.expanduser(libc_database_path)
-        }
+        #: Path to local installation of libc-database, if using it.
+        self.libc_database_path: str = os.path.expanduser(libc_database_path)
 
         # set pwntools' context appropriately
         context.binary = self.binary_name  # set architecture etc. automagically

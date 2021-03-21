@@ -24,6 +24,5 @@ setup(
     entry_points={"console_scripts": ["autorop=autorop.cli:main"]},
     install_requires=[
         "pwntools",
-        "typing-extensions",
     ],
 )
