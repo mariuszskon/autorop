@@ -5,7 +5,7 @@ from typing import List
 LIBC_NAME_REGEX = re.compile(r"^.* \((.*)\)$")
 
 
-def libc_database(state: PwnState) -> PwnState:
+def database(state: PwnState) -> PwnState:
     """Acquire libc version using local installation of `libc-database <https://github.com/niklasb/libc-database>`_
 
     We can programmatically find libc based on function address leaks

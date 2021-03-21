@@ -5,7 +5,7 @@ from typing import Callable
 def classic(
     find: constants.TYPE_PIPE = bof.corefile,
     leak: constants.TYPE_PIPE = leak.puts,
-    lookup: constants.TYPE_PIPE = libc.libc_database,
+    lookup: constants.TYPE_PIPE = libc.database,
     shell: constants.TYPE_PIPE = call.system_binsh,
 ) -> constants.TYPE_PIPE:
     """Perform a "classic" attack against a binary.
