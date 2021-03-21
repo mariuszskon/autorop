@@ -1,6 +1,7 @@
 # common functions/fixtures which can be reused throughout tests
 from autorop import *
 import pytest
+from contextlib import contextmanager
 
 
 @pytest.fixture
@@ -32,3 +33,14 @@ def have_shell(tube):
     log.debug(f"Shell response line: {line}")
     log.debug(f"Rest: {rest}")
     return line == b"/bin/sh\n"
+
+
+# https://stackoverflow.com/a/37996581
+@contextmanager
+def cwd(path):
+    oldpwd = os.getcwd()
+    os.chdir(path)
+    try:
+        yield
+    finally:
+        os.chdir(oldpwd)
