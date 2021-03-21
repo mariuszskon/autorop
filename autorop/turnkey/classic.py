@@ -36,7 +36,7 @@ def classic(
         to the mutated ``PwnState``.
     """
 
-    def f(state: PwnState) -> PwnState:
+    def classic_instance(state: PwnState) -> PwnState:
         return pipeline(state, find, leak, lookup, shell)
 
-    return f
+    return classic_instance
