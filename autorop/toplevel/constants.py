@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from autorop import PwnState
 
 #: pwntools ``tube.clean(CLEAN_TIME)``, for removing excess output
-CLEAN_TIME = 1
+CLEAN_TIME = 0.5
 
 #: Stack alignment, in bytes
 #: Ubuntu et al. on x86_64 require it
