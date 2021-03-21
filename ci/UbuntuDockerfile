@@ -22,7 +22,8 @@ COPY ./ci/tests/versions.sh ./ci/tests/lint.sh ./ci/tests/typecheck.sh ./ci/test
 COPY . ./
 RUN rm -rf venv/
 RUN python3 -m venv venv
-# TODO: make a proper python package to clean this nonsense
+# make docker cache dependencies
 RUN . ./venv/bin/activate && \
-    pip install --upgrade pip black mypy pytest pytest-rerunfailures coverage && \
-    pip install .
+    pip install --upgrade pip && \
+    pip install --upgrade black mypy pytest pytest-rerunfailures coverage pwntools
+RUN . ./venv/bin/activate && pip install .
