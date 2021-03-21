@@ -1,5 +1,4 @@
 from autorop import PwnState, pipeline, bof, leak, libc, call, constants
-from typing import Callable
 
 
 def classic(

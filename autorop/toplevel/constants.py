@@ -1,6 +1,4 @@
-from typing import Callable
-
-from typing import TYPE_CHECKING
+from typing import Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from autorop import PwnState

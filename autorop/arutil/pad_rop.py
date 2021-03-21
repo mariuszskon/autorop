@@ -1,4 +1,3 @@
-from autorop import PwnState
 from pwn import ROP
 
 

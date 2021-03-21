@@ -1,5 +1,5 @@
 from autorop import PwnState, arutil
-from pwn import log, ELF, ROP
+from pwn import log, ELF
 import requests
 from typing import Dict
 

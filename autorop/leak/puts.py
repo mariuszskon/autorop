@@ -1,5 +1,5 @@
-from autorop import PwnState, arutil, constants
-from pwn import context, ROP, ELF, log, align
+from autorop import PwnState, arutil
+from pwn import ROP
 
 
 def puts(state: PwnState) -> PwnState:

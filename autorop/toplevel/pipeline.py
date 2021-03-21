@@ -1,8 +1,7 @@
 from autorop import PwnState, constants
 from pwn import log
-from pwn import context
 from functools import reduce
-from typing import Callable, Tuple
+from typing import Tuple
 
 
 def pipeline(state: PwnState, *funcs: constants.TYPE_PIPE) -> PwnState:

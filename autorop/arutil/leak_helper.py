@@ -1,5 +1,5 @@
 from autorop import PwnState, arutil, constants
-from pwn import context, ROP, log, align
+from pwn import ROP, log
 from typing import List, Callable
 
 
