@@ -13,6 +13,7 @@ jobs:
           'ubuntu:18.04',
           'ubuntu:20.04',
           'debian:10',
+          'kalilinux/kali:amd64',
         ]
       fail-fast: false  # do not stop other matrix jobs if one fails
 

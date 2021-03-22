@@ -6,7 +6,7 @@ LIBC_DATABASE_IMAGE="mariuszskon/libc-database:2021.03.23"
 
 docker pull $LIBC_DATABASE_IMAGE
 
-if [[ $1 == ubuntu:* || $1 == debian:* ]]
+if [[ $1 == ubuntu:* || $1 == debian:* || $1 == kalilinux/kali:* ]]
 then
     docker build -f DebianDockerfile --build-arg "LIBC_DATABASE_IMAGE=$LIBC_DATABASE_IMAGE" --build-arg "DEBIAN_IMAGE=$1" -t "autorop-test-$1" ..
 else
