@@ -97,3 +97,21 @@ See how the below example neatly manages to "downgrade" the problem from somethi
 
 .. |MIT license| image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://github.com/mariuszskon/autorop/blob/master/LICENSE
+
+Install
+-------
+
+1. Install `libc-database <https://github.com/niklasb/libc-database>`_ into ``~/.libc-database`` (or your own location then edit ``state.libc_database_path``).
+2. Install autorop itself. You might want to be in your `python virtual environment <https://docs.python.org/3/tutorial/venv.html>`_. After cloning, install with pip:
+
+.. code-block:: text
+
+    $ git clone https://github.com/mariuszskon/autorop && cd autorop && pip install .
+
+3. Make sure corefiles are enabled and are plainly written to the right directory:
+
+.. code-block:: text
+
+    # sysctl -w kernel.core_pattern=core.%p
+
+4. All done!
