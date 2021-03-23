@@ -22,7 +22,10 @@ setup(
     ],
     packages=find_packages(),
     entry_points={"console_scripts": ["autorop=autorop.cli:main"]},
+    python_requires=">=3.6.0",
     install_requires=[
         "pwntools",
+        "dataclasses>='0.7';python_version<'3.7'",
+        "typing-extensions",
     ],
 )

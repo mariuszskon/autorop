@@ -50,6 +50,10 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# List some special members
+autodoc_default_options = {
+    "special-members": "__call__",
+}
 
 # -- Options for HTML output -------------------------------------------------
 
