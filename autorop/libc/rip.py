@@ -2,6 +2,7 @@ from autorop import PwnState, arutil
 from pwn import log, ELF
 import requests
 from typing import Dict
+from dataclasses import replace
 
 
 def rip(state: PwnState) -> PwnState:
@@ -17,12 +18,14 @@ def rip(state: PwnState) -> PwnState:
             - ``leaks``: Leaked symbols of libc.
 
     Returns:
-        Reference to the mutated ``PwnState``, with the following updated
+        New ``PwnState``, with the following updated
 
             - ``libc``: ``ELF`` of ``target``'s libc, according to https://libc.rip.
               ``state.libc.address`` is also set based on one of the leaks
               and its position in the downloaded libc.
     """
+    assert state.leaks is not None
+
     URL = "https://libc.rip/api/find"
     LIBC_FILE = ".autorop.libc"
     formatted_leaks: Dict[str, str] = {}
@@ -45,13 +48,15 @@ def rip(state: PwnState) -> PwnState:
     with open(LIBC_FILE, "wb") as f:
         f.write(r.content)
 
-    state.libc = ELF(LIBC_FILE)
+    libc = ELF(LIBC_FILE)
     # pick first leak and use that to calculate base
     some_symbol, its_address = next(iter(state.leaks.items()))
-    state.libc.address = its_address - state.libc.symbols[some_symbol]
+    libc.address = its_address - libc.symbols[some_symbol]
+    state = replace(state, libc=libc)
 
     # sanity check
     for symbol, address in state.leaks.items():
+        assert state.libc is not None
         diff = address - state.libc.symbols[symbol]
         if diff != 0:
             log.warning(f"symbol {symbol} has delta with actual libc of {hex(diff)}")

@@ -18,7 +18,7 @@ def custom(
 
     Returns:
         Function which takes a ``PwnState``, doing the call, and returns reference
-        to the mutated ``PwnState``.
+        to the new ``PwnState``.
     """
 
     def custom_call(state: PwnState) -> PwnState:

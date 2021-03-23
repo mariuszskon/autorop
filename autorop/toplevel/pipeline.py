@@ -9,7 +9,7 @@ def pipeline(state: PwnState, *funcs: constants.TYPE_PIPE) -> PwnState:
 
     Arguments:
         state: The ``PwnState`` to pass to the first function in ``funcs``.
-        funcs: Functions which operate on the ``PwnState`` and return it.
+        funcs: Functions which operate on the ``PwnState`` and return another ``PwnState''.
 
     Returns:
         The ``PwnState`` returned by the last function in ``funcs``.

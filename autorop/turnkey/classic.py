@@ -32,8 +32,7 @@ def classic(
         shell: Spawner of shell. :mod:`autorop.call` may be of interest.
 
     Returns:
-        Function which takes a ``PwnState``, and returns reference
-        to the mutated ``PwnState``.
+        Function which takes a ``PwnState``, and returns the new ``PwnState``.
     """
 
     def classic_instance(state: PwnState) -> PwnState:

@@ -51,7 +51,7 @@ API
 
 Importing autorop automatically does a ``from pwn import *``, so you can use all of `pwntools' goodies <https://docs.pwntools.com/en/latest/>`_.
 
-Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`_. Most functions take in a ``PwnState``, mutate it, and pass it on to the next function. This allows great simplicity and flexibility.
+Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`_. Most functions take in a ``PwnState``, and pass it on to the next function with some attributes changed. ``PwnState`` itself is immutable, so a copy is returned. This allows great simplicity and flexibility.
 
 See how the below example neatly manages to "downgrade" the problem from something unique, to something generic that the ``classic`` pipeline can handle.
 
@@ -84,7 +84,7 @@ See how the below example neatly manages to "downgrade" the problem from somethi
     s = PwnState(BIN, process(BIN))
 
     # build a custom pipeline - base classic pipeline, with printf for leaking
-    state = pipeline(s, set_overwriter, turnkey.classic(leak=leak.printf))
+    s = pipeline(s, set_overwriter, turnkey.classic(leak=leak.printf))
 
     # switch to interactive shell which we got via the exploit
     s.target.interactive()

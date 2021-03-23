@@ -20,7 +20,7 @@ def system_binsh(state: PwnState) -> PwnState:
             - ``overwriter``: Function which writes rop chain to the "right place".
 
     Returns:
-        Reference to the mutated ``PwnState``, with no direct property updates.
+        New ``PwnState``, with no property updates.
     """
     assert state.libc is not None
 

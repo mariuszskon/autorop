@@ -27,7 +27,7 @@ def default_overwriter(t: tube, data: bytes) -> None:
     t.sendline(data)
 
 
-@dataclass
+@dataclass(frozen=True)
 class PwnState:
     """Class for keeping track of our exploit development."""
 
@@ -44,7 +44,7 @@ class PwnState:
     #: Path to local installation of libc-database, if using it.
     libc_database_path: str = os.path.expanduser("~/.libc-database")
 
-    #: ``ELF`` of ``target``'s libc.
+    #: pwntools' ``ELF`` of ``target``'s libc.
     libc: Optional[ELF] = None
 
     #: Offset to return address via buffer overflow.
@@ -56,7 +56,7 @@ class PwnState:
     #: Leaked symbols of ``libc``.
     leaks: Dict[str, int] = field(default_factory=dict)
 
-    #: pwntools ``ELF`` of ``binary_name``.
+    #: pwntools' ``ELF`` of ``binary_name``.
     elf: ELF = field(init=False)
 
     def __post_init__(self) -> None:
@@ -66,8 +66,7 @@ class PwnState:
         We also set ``context.binary`` to the given ``binary_name``,
         and ``context.cyclic_size`` to ``context.bytes``.
         """
-        #: pwntools ``ELF`` of ``binary_name``.
-        self.elf = ELF(self.binary_name)
+        object.__setattr__(self, "elf", ELF(self.binary_name))
 
         # set pwntools' context appropriately
         context.binary = self.binary_name  # set architecture etc. automagically

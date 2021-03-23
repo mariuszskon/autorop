@@ -1,6 +1,7 @@
 from autorop import PwnState
 from pwn import log, ELF, re, subprocess
 from typing import List
+from dataclasses import replace
 
 LIBC_NAME_REGEX = re.compile(r"^.* \((.*)\)$")
 
@@ -19,12 +20,15 @@ def database(state: PwnState) -> PwnState:
             - ``libc_database_path``: Path to libc-database installation.
 
     Returns:
-        Reference to the mutated ``PwnState``, with the following updated
+        New ``PwnState``, with the following updated
 
             - ``libc``: ``ELF`` of ``target``'s libc, according to local libc-database installation.
               ``state.libc.address`` is also set based on one of the leaks
               and its position in the found libc.
     """
+    assert state.leaks is not None
+    assert state.libc_database_path is not None
+
     flattened_args: List[str] = []
     for symbol, address in state.leaks.items():
         flattened_args.append(symbol)
@@ -47,13 +51,15 @@ def database(state: PwnState) -> PwnState:
     libc_name = LIBC_NAME_REGEX.fullmatch(results[0]).group(1)
     path_to_libc = f"{state.libc_database_path}/db/{libc_name}.so"
 
-    state.libc = ELF(path_to_libc)
+    libc = ELF(path_to_libc)
     # pick first leak and use that to calculate base
     some_symbol, its_address = next(iter(state.leaks.items()))
-    state.libc.address = its_address - state.libc.symbols[some_symbol]
+    libc.address = its_address - libc.symbols[some_symbol]
+    state = replace(state, libc=libc)
 
     # sanity check
     for symbol, address in state.leaks.items():
+        assert state.libc is not None
         diff = address - state.libc.symbols[symbol]
         if diff != 0:
             log.warning(f"symbol {symbol} has delta with actual libc of {hex(diff)}")

@@ -18,7 +18,7 @@ def printf(state: PwnState) -> PwnState:
               which we can return to repeatedly.
 
     Returns:
-        Reference to the mutated ``PwnState``, with the following updated
+        New ``PwnState``, with the following updated
 
             - ``leaks``: Updated with ``"symbol": address`` pairs for each
               function address of libc that was leaked.
