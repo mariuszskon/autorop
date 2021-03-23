@@ -31,8 +31,6 @@ jobs:
         sudo rm -rf /usr/share/dotnet
         df -h
 
-    - uses: satackey/action-docker-layer-caching@v0.0.11
-
     - name: Set corefile configuration
       run: sudo sysctl -w kernel.core_pattern="core.%p"
 
