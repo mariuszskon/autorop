@@ -36,9 +36,10 @@ def leak_helper(
             - ``leaks``: Updated with ``"symbol": address`` pairs for each
               function address of libc that was leaked.
     """
-    rop = ROP(state.elf)
+    assert state._elf is not None
+    rop = ROP(state._elf)
     for symbol in symbols:
-        rop = leaker(rop, state.elf.got[symbol] + offset)
+        rop = leaker(rop, state._elf.got[symbol] + offset)
 
     # return back so we can execute more chains later
     arutil.align_call(rop, state.vuln_function, [])

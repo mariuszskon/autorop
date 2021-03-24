@@ -22,9 +22,8 @@ def database(state: PwnState) -> PwnState:
     Returns:
         New ``PwnState``, with the following updated
 
-            - ``libc``: ``ELF`` of ``target``'s libc, according to local libc-database installation.
-              ``state.libc.address`` is also set based on one of the leaks
-              and its position in the found libc.
+            - ``libc``: Path to ``target``'s libc.
+            - ``libc_base``: Base address of ``libc``.
     """
     assert state.leaks is not None
     assert state.libc_database_path is not None
@@ -55,12 +54,12 @@ def database(state: PwnState) -> PwnState:
     # pick first leak and use that to calculate base
     some_symbol, its_address = next(iter(state.leaks.items()))
     libc.address = its_address - libc.symbols[some_symbol]
-    state = replace(state, libc=libc)
+    state = replace(state, libc=path_to_libc, libc_base=libc.address)
 
     # sanity check
     for symbol, address in state.leaks.items():
         assert state.libc is not None
-        diff = address - state.libc.symbols[symbol]
+        diff = address - libc.symbols[symbol]
         if diff != 0:
             log.warning(f"symbol {symbol} has delta with actual libc of {hex(diff)}")
 

@@ -22,7 +22,7 @@ def custom(
     """
 
     def custom_call(state: PwnState) -> PwnState:
-        rop = ROP(state.elf)
+        rop = ROP(state._elf)
 
         if align:
             arutil.align_call(rop, func_name, args)

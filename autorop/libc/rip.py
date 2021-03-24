@@ -20,9 +20,8 @@ def rip(state: PwnState) -> PwnState:
     Returns:
         New ``PwnState``, with the following updated
 
-            - ``libc``: ``ELF`` of ``target``'s libc, according to https://libc.rip.
-              ``state.libc.address`` is also set based on one of the leaks
-              and its position in the downloaded libc.
+            - ``libc``: Path to ``target``'s libc, according to https://libc.rip.
+            - ``libc_base``: Base address of ``libc``.
     """
     assert state.leaks is not None
 
@@ -52,12 +51,12 @@ def rip(state: PwnState) -> PwnState:
     # pick first leak and use that to calculate base
     some_symbol, its_address = next(iter(state.leaks.items()))
     libc.address = its_address - libc.symbols[some_symbol]
-    state = replace(state, libc=libc)
+    state = replace(state, libc=LIBC_FILE, libc_base=libc.address)
 
     # sanity check
     for symbol, address in state.leaks.items():
         assert state.libc is not None
-        diff = address - state.libc.symbols[symbol]
+        diff = address - libc.symbols[symbol]
         if diff != 0:
             log.warning(f"symbol {symbol} has delta with actual libc of {hex(diff)}")
 

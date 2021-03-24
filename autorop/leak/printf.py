@@ -27,8 +27,9 @@ def printf(state: PwnState) -> PwnState:
 
     def leaker(rop: ROP, address: int) -> ROP:
         arutil.align_call(rop, "printf", [address])
+        assert state._elf is not None
         # must send newline to satisfy ``arutil.leak_helper``
-        arutil.align_call(rop, "printf", [next(state.elf.search(b"\n\x00"))])
+        arutil.align_call(rop, "printf", [next(state._elf.search(b"\n\x00"))])
         return rop
 
     return arutil.leak_helper(state, leaker, LEAK_FUNCS)

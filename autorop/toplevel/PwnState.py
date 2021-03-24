@@ -1,4 +1,5 @@
 from pwn import context, tube, ELF, os
+from copy import deepcopy
 from typing import Optional, Callable, Dict, Any
 from typing_extensions import Protocol
 from dataclasses import dataclass, field
@@ -27,7 +28,7 @@ def default_overwriter(t: tube, data: bytes) -> None:
     t.sendline(data)
 
 
-@dataclass(frozen=True)
+@dataclass
 class PwnState:
     """Class for keeping track of our exploit development."""
 
@@ -44,8 +45,11 @@ class PwnState:
     #: Path to local installation of libc-database, if using it.
     libc_database_path: str = os.path.expanduser("~/.libc-database")
 
-    #: pwntools' ``ELF`` of ``target``'s libc.
-    libc: Optional[ELF] = None
+    #: Path to ``target``'s libc.
+    libc: Optional[str] = None
+
+    #: Base address of ``target``'s libc.
+    libc_base: Optional[int] = None
 
     #: Offset to return address via buffer overflow.
     bof_ret_offset: Optional[int] = None
@@ -56,8 +60,8 @@ class PwnState:
     #: Leaked symbols of ``libc``.
     leaks: Dict[str, int] = field(default_factory=dict)
 
-    #: pwntools' ``ELF`` of ``binary_name``.
-    elf: ELF = field(init=False)
+    #: pwntools' ``ELF`` of ``binary_name``. Please only read from it.
+    _elf: Optional[ELF] = None
 
     def __post_init__(self) -> None:
         """Initialise the ``PwnState``.
@@ -66,8 +70,29 @@ class PwnState:
         We also set ``context.binary`` to the given ``binary_name``,
         and ``context.cyclic_size`` to ``context.bytes``.
         """
-        object.__setattr__(self, "elf", ELF(self.binary_name))
+        if self._elf is None:
+            object.__setattr__(self, "_elf", ELF(self.binary_name))
 
         # set pwntools' context appropriately
         context.binary = self.binary_name  # set architecture etc. automagically
         context.cyclic_size = context.bytes
+
+    def __copy__(self) -> "PwnState":
+        """Deep copy this state, except for ``target``..
+
+        Perform a deep copy of the state, except for ``target`` (which remains
+        a "constant pointer" to the target connection, which of course can change).
+        ``_elf`` is also only shallow-copied but you should not be writing to it.
+        """
+        return PwnState(
+            binary_name=self.binary_name,
+            target=self.target,
+            vuln_function=self.vuln_function,
+            libc_database_path=self.libc_database_path,
+            libc=self.libc,
+            libc_base=self.libc_base,
+            bof_ret_offset=self.bof_ret_offset,
+            overwriter=self.overwriter,
+            leaks=self.leaks.copy(),
+            _elf=self._elf,
+        )
