@@ -58,6 +58,6 @@ def leak_helper(
         # TODO: make this a bit less hacky maybe
         # try leaking next bytes if we happen to stumble upon a zero byte
         if state.leaks[symbol] == 0x0:  # unluckily the address has a zero at start
-            return leak_helper(state, leaker, [symbol], offset + 1)
+            leak_helper(state, leaker, [symbol], offset + 1)
 
     return state

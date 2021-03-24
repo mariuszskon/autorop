@@ -1,7 +1,6 @@
 from autorop import PwnState
 from pwn import log, ELF, re, subprocess
 from typing import List
-from dataclasses import replace
 
 LIBC_NAME_REGEX = re.compile(r"^.* \((.*)\)$")
 
@@ -20,7 +19,7 @@ def database(state: PwnState) -> PwnState:
             - ``libc_database_path``: Path to libc-database installation.
 
     Returns:
-        New ``PwnState``, with the following updated
+        Mutated ``PwnState``, with the following updated
 
             - ``libc``: Path to ``target``'s libc.
             - ``libc_base``: Base address of ``libc``.
@@ -54,7 +53,8 @@ def database(state: PwnState) -> PwnState:
     # pick first leak and use that to calculate base
     some_symbol, its_address = next(iter(state.leaks.items()))
     libc.address = its_address - libc.symbols[some_symbol]
-    state = replace(state, libc=path_to_libc, libc_base=libc.address)
+    state.libc = path_to_libc
+    state.libc_base = libc.address
 
     # sanity check
     for symbol, address in state.leaks.items():

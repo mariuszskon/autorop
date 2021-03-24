@@ -2,7 +2,6 @@ from autorop import PwnState, arutil
 from pwn import log, ELF
 import requests
 from typing import Dict
-from dataclasses import replace
 
 
 def rip(state: PwnState) -> PwnState:
@@ -18,7 +17,7 @@ def rip(state: PwnState) -> PwnState:
             - ``leaks``: Leaked symbols of libc.
 
     Returns:
-        New ``PwnState``, with the following updated
+        Mutated ``PwnState``, with the following updated
 
             - ``libc``: Path to ``target``'s libc, according to https://libc.rip.
             - ``libc_base``: Base address of ``libc``.
@@ -51,7 +50,8 @@ def rip(state: PwnState) -> PwnState:
     # pick first leak and use that to calculate base
     some_symbol, its_address = next(iter(state.leaks.items()))
     libc.address = its_address - libc.symbols[some_symbol]
-    state = replace(state, libc=LIBC_FILE, libc_base=libc.address)
+    state.libc = LIBC_FILE
+    state.libc_base = libc.address
 
     # sanity check
     for symbol, address in state.leaks.items():

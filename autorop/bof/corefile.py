@@ -1,6 +1,5 @@
 from autorop import PwnState
 from pwn import tube, process, cyclic, cyclic_find, log, pack
-from dataclasses import replace
 
 
 def corefile(state: PwnState) -> PwnState:
@@ -22,7 +21,7 @@ def corefile(state: PwnState) -> PwnState:
             - ``overwriter``: Function which writes rop chain to the "right place".
 
     Returns:
-        New ``PwnState``, with the following updated
+        Mutated ``PwnState``, with the following updated
 
             - ``bof_ret_offset``: Updated if it was not set before.
             - ``overwriter``: Now calls the previous ``overwriter`` but with
@@ -39,11 +38,11 @@ def corefile(state: PwnState) -> PwnState:
         p.wait()
         fault: int = p.corefile.fault_addr
         log.info("Fault address @ " + hex(fault))
-        bof_ret_offset = cyclic_find(pack(fault))
-    log.info("Offset to return address is " + str(bof_ret_offset))
+        state.bof_ret_offset = cyclic_find(pack(fault))
+    log.info("Offset to return address is " + str(state.bof_ret_offset))
 
-    if bof_ret_offset < 0:
-        log.error(f"Invalid offset to return addess ({bof_ret_offset})!")
+    if state.bof_ret_offset < 0:
+        log.error(f"Invalid offset to return addess ({state.bof_ret_offset})!")
 
     old_overwriter = state.overwriter
 
@@ -51,6 +50,6 @@ def corefile(state: PwnState) -> PwnState:
     def overwriter(t: tube, data: bytes) -> None:
         old_overwriter(t, cyclic(state.bof_ret_offset) + data)
 
-    state = replace(state, bof_ret_offset=bof_ret_offset, overwriter=overwriter)
+    state.overwriter = overwriter
 
     return state
