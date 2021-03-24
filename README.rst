@@ -51,7 +51,7 @@ API
 
 Importing autorop automatically does a ``from pwn import *``, so you can use all of `pwntools' goodies <https://docs.pwntools.com/en/latest/>`_.
 
-Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`_. Most functions take in a ``PwnState``, and pass it on to the next function with some attributes changed. ``PwnState`` itself is immutable, so a copy is returned. This allows great simplicity and flexibility.
+Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`_. Most functions take in a ``PwnState``, and pass it on to the next function with some attributes changed. ``pipeline`` copies\* the ``PwnState`` between each function so mutations are safe. This allows great simplicity and flexibility.
 
 See how the below example neatly manages to "downgrade" the problem from something unique, to something generic that the ``classic`` pipeline can handle.
 
@@ -88,6 +88,8 @@ See how the below example neatly manages to "downgrade" the problem from somethi
 
     # switch to interactive shell which we got via the exploit
     s.target.interactive()
+
+\***Note**: Although most of the attributes are deep-copied, ``target`` and ``_elf`` is not.
 
 .. |docs| image:: https://readthedocs.org/projects/autorop/badge/
     :target: https://autorop.readthedocs.io

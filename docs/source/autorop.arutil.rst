@@ -44,6 +44,14 @@ autorop.arutil.leak\_helper module
    :undoc-members:
    :show-inheritance:
 
+autorop.arutil.load\_libc module
+--------------------------------
+
+.. automodule:: autorop.arutil.load_libc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 autorop.arutil.pad\_rop module
 ------------------------------
 

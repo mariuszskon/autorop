@@ -20,7 +20,7 @@ def system_binsh(state: PwnState) -> PwnState:
             - ``overwriter``: Function which writes rop chain to the "right place".
 
     Returns:
-        New ``PwnState``, with no property updates.
+        The given ``PwnState``.
     """
     libc = arutil.load_libc(state)
     rop = ROP([state._elf, libc])

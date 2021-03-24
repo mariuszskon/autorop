@@ -31,7 +31,7 @@ def leak_helper(
                 (this is helpful if the leaker function terminates on a zero byte)
 
     Returns:
-        New ``PwnState``, with the following updated
+        Mutated ``PwnState``, with the following updated
 
             - ``leaks``: Updated with ``"symbol": address`` pairs for each
               function address of libc that was leaked.
