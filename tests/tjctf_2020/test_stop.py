@@ -22,7 +22,7 @@ def test_stop(exploit):
         return state
 
     # create a starting state - modified to use fixture
-    s = exploit(BIN, process(BIN))
+    s = exploit(BIN, lambda: process(BIN))
 
     # build a custom pipeline - base classic pipeline, with printf for leaking
     pipeline = Pipeline(set_overwriter, turnkey.classic(leak=leak.printf))

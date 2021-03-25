@@ -12,7 +12,7 @@ def printf(state: PwnState) -> PwnState:
         state: The current ``PwnState`` with the following set
 
             - ``target``: What we want to exploit.
-            - ``elf``: pwntools ``ELF`` of ``state.binary_name``.
+            - ``_elf``: pwntools ``ELF`` of ``state.binary_name``.
             - ``overwriter``: Function which writes rop chain to the "right place".
             - ``vuln_function``: Name of vulnerable function in binary,
               which we can return to repeatedly.
@@ -20,6 +20,8 @@ def printf(state: PwnState) -> PwnState:
     Returns:
         Mutated ``PwnState``, with the following updated
 
+            - ``target``: The instance of target from which we got a successful leak.
+              Hopefully it can still be interacted with.
             - ``leaks``: Updated with ``"symbol": address`` pairs for each
               function address of libc that was leaked.
     """

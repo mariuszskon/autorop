@@ -23,6 +23,19 @@ class OverwriterFunction(Protocol):
         pass
 
 
+class TargetFactory(Protocol):
+    def __call__(self) -> tube:
+        """Produce a fresh pwntools' tube of the target.
+
+        Create a ``tube`` of the desired target. This may be called multiple
+        times to try multiple different exploits.
+
+        Returns:
+            Instance of target to exploit.
+        """
+        ...
+
+
 def default_overwriter(t: tube, data: bytes) -> None:
     """Function which writes data via ``t.sendline(data)``"""
     t.sendline(data)
@@ -36,7 +49,10 @@ class PwnState:
     binary_name: str
 
     #: What we want to exploit (can be local, or remote).
-    target: tube
+    #: You need to pass in something that can produce a pwntools' tube
+    #: for the actual target. This may be called multiple times
+    #: to try multiple exploits.
+    target_factory: TargetFactory
 
     #: Name of vulnerable function in binary,
     #: which we can return to repeatedly.
@@ -60,6 +76,9 @@ class PwnState:
     #: Leaked symbols of ``libc``.
     leaks: Dict[str, int] = field(default_factory=dict)
 
+    #: Current target, if any. Produced from calling ``target_factory``.
+    target: Optional[tube] = None
+
     #: pwntools' ``ELF`` of ``binary_name``. Please only read from it.
     _elf: Optional[ELF] = None
 
@@ -71,7 +90,10 @@ class PwnState:
         and ``context.cyclic_size`` to ``context.bytes``.
         """
         if self._elf is None:
-            object.__setattr__(self, "_elf", ELF(self.binary_name))
+            self._elf = ELF(self.binary_name)
+
+        if self.target is None:
+            self.target = self.target_factory()
 
         # set pwntools' context appropriately
         context.binary = self.binary_name  # set architecture etc. automagically
@@ -86,7 +108,7 @@ class PwnState:
         """
         return PwnState(
             binary_name=self.binary_name,
-            target=self.target,
+            target_factory=self.target_factory,
             vuln_function=self.vuln_function,
             libc_database_path=self.libc_database_path,
             libc=self.libc,
@@ -94,5 +116,6 @@ class PwnState:
             bof_ret_offset=self.bof_ret_offset,
             overwriter=self.overwriter,
             leaks=self.leaks.copy(),
+            target=self.target,
             _elf=self._elf,
         )

@@ -16,7 +16,8 @@ def exploit():
 
     yield inner
     try:
-        wrapper[0].target.close()
+        if wrapper[0].target is not None:
+            wrapper[0].target.close()
     except BrokenPipeError:
         pass
 
