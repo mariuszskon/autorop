@@ -15,7 +15,7 @@ def test_callme32_local(exploit):
         state = exploit(BIN32, lambda: process(BIN32))
         state.overwriter = overwriter
         state = turnkey.classic()(state)
-        assert have_shell(state.target)
+        assert assertion.have_shell(state.target)
 
 
 def test_callme_local(exploit):
@@ -23,4 +23,4 @@ def test_callme_local(exploit):
         state = exploit(BIN64, lambda: process(BIN64))
         state.overwriter = overwriter
         state = turnkey.classic()(state)
-        assert have_shell(state.target)
+        assert assertion.have_shell(state.target)

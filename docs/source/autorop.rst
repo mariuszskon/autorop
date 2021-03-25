@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    autorop.arutil
+   autorop.assertion
    autorop.bof
    autorop.call
    autorop.leak

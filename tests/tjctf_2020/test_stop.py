@@ -28,4 +28,4 @@ def test_stop(exploit):
     pipeline = Pipeline(set_overwriter, turnkey.classic(leak=leak.printf))
     result = pipeline(s)
 
-    assert have_shell(result.target)
+    assert assertion.have_shell(result.target)

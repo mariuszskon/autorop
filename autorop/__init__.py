@@ -9,6 +9,7 @@ from autorop.toplevel.Pipeline import Pipeline
 
 all_modules = [
     "arutil",
+    "assertion",
     "bof",
     "call",
     "leak",
