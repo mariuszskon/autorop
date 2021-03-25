@@ -25,6 +25,7 @@ def test_stop(exploit):
     s = exploit(BIN, process(BIN))
 
     # build a custom pipeline - base classic pipeline, with printf for leaking
-    state = pipeline(s, set_overwriter, turnkey.classic(leak=leak.printf))
+    pipeline = Pipeline(set_overwriter, turnkey.classic(leak=leak.printf))
+    result = pipeline(s)
 
-    assert have_shell(state.target)
+    assert have_shell(result.target)

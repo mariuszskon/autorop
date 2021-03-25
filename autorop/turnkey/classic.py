@@ -1,4 +1,4 @@
-from autorop import PwnState, pipeline, bof, leak, libc, call, constants
+from autorop import PwnState, Pipeline, bof, leak, libc, call, constants
 
 
 def classic(
@@ -35,7 +35,4 @@ def classic(
         Function which takes a ``PwnState``, and returns the new ``PwnState``.
     """
 
-    def classic_instance(state: PwnState) -> PwnState:
-        return pipeline(state, find, leak, lookup, shell)
-
-    return classic_instance
+    return Pipeline(find, leak, lookup, shell)

@@ -5,7 +5,7 @@ import importlib
 # necessary to prevent python getting confused between variable and file names
 import autorop.toplevel.constants as constants
 from autorop.toplevel.PwnState import PwnState
-from autorop.toplevel.pipeline import pipeline
+from autorop.toplevel.Pipeline import Pipeline
 
 all_modules = [
     "arutil",

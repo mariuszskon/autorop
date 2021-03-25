@@ -84,12 +84,13 @@ See how the below example neatly manages to "downgrade" the problem from somethi
     s = PwnState(BIN, process(BIN))
 
     # build a custom pipeline - base classic pipeline, with printf for leaking
-    s = pipeline(s, set_overwriter, turnkey.classic(leak=leak.printf))
+    pipeline = Pipeline(set_overwriter, turnkey.classic(leak=leak.printf))
+    result = pipeline(s)
 
     # switch to interactive shell which we got via the exploit
-    s.target.interactive()
+    result.target.interactive()
 
-\***Note**: Although most of the attributes are deep-copied, ``target`` and ``_elf`` is not.
+\* **Note**: Although most of the attributes are deep-copied, ``target`` and ``_elf`` is not.
 
 .. |docs| image:: https://readthedocs.org/projects/autorop/badge/
     :target: https://autorop.readthedocs.io

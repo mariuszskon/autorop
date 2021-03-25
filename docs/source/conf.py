@@ -52,7 +52,7 @@ exclude_patterns = []
 
 # List some special members
 autodoc_default_options = {
-    "special-members": "__call__",
+    "special-members": "__init__,__call__",
 }
 
 # -- Options for HTML output -------------------------------------------------

@@ -4,6 +4,14 @@ autorop.toplevel package
 Submodules
 ----------
 
+autorop.toplevel.Pipeline module
+--------------------------------
+
+.. automodule:: autorop.toplevel.Pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 autorop.toplevel.PwnState module
 --------------------------------
 
@@ -16,14 +24,6 @@ autorop.toplevel.constants module
 ---------------------------------
 
 .. automodule:: autorop.toplevel.constants
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-autorop.toplevel.pipeline module
---------------------------------
-
-.. automodule:: autorop.toplevel.pipeline
    :members:
    :undoc-members:
    :show-inheritance:
