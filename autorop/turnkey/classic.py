@@ -3,7 +3,7 @@ from autorop import PwnState, Pipeline, bof, leak, libc, call, constants
 
 def classic(
     find: constants.TYPE_PIPE = bof.corefile,
-    leak: constants.TYPE_PIPE = leak.puts,
+    leak: constants.TYPE_PIPE = leak.puts(),
     lookup: constants.TYPE_PIPE = libc.auto,
     shell: constants.TYPE_PIPE = call.system_binsh,
 ) -> constants.TYPE_PIPE:

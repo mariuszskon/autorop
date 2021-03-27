@@ -1,12 +1,12 @@
 from autorop import PwnState, arutil, constants
 from pwn import ROP, log
-from typing import List, Callable
+from typing import Iterable, Callable
 
 
 def leak_helper(
     state: PwnState,
     leaker: Callable[[ROP, int], ROP],
-    symbols: List[str],
+    symbols: Iterable[str],
     offset: int = 0,
 ) -> PwnState:
     """Leak libc addresses using a leaking function.
