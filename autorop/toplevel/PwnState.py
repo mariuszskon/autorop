@@ -108,9 +108,6 @@ class PwnState:
         if self._elf is None:
             self._elf = ELF(self.binary_name)
 
-        if self.target is None:
-            self.target = self.target_factory()
-
         # set pwntools' context appropriately
         context.binary = self.binary_name  # set architecture etc. automagically
         context.cyclic_size = context.bytes

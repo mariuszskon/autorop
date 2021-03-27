@@ -1,4 +1,4 @@
-from autorop import PwnState, Pipeline, bof, leak, libc, call, constants
+from autorop import PwnState, Pipeline, arutil, bof, leak, libc, call, constants
 
 
 def classic(
@@ -35,4 +35,4 @@ def classic(
         Function which takes a ``PwnState``, and returns the new ``PwnState``.
     """
 
-    return Pipeline(find, leak, lookup, shell)
+    return Pipeline(find, arutil.open_target, leak, lookup, shell)

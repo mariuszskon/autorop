@@ -8,8 +8,8 @@ def printf(
 ) -> constants.TYPE_PIPE:
     """Leak libc addresses using ``printf``.
 
-    This returns a function which leaks the libc addresses of (by default)
-    ``__libc_start_main`` and ``printf`` using ``printf``,
+    This returns a function which opens a new target, and leaks
+    the addresses of (by default) ``__libc_start_main`` and ``printf`` using ``printf``,
     placing them in ``state.leaks``.
 
     Arguments:
@@ -20,7 +20,7 @@ def printf(
         Function which takes a state, and returns the Mutated ``PwnState``,
         with the following updated
 
-            - ``target``: The instance of target from which we got a successful leak.
+            - ``target``: The fresh instance of target from which we got a successful leak.
               Hopefully it can still be interacted with.
             - ``leaks``: Updated with ``"symbol": address`` pairs for each
               function address of libc that was leaked.
