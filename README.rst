@@ -88,9 +88,9 @@ See how the below example neatly manages to "downgrade" the problem from somethi
     result = pipeline(s)
 
     # switch to interactive shell which we got via the exploit
-    result.current_target.interactive()
+    result.target.interactive()
 
-\* **Note**: Although most of the attributes are deep-copied, ``current_target`` and ``_elf`` are not.
+\* **Note**: Although most of the attributes are deep-copied, ``target`` and ``_elf`` are not.
 
 .. |docs| image:: https://readthedocs.org/projects/autorop/badge/
     :target: https://autorop.readthedocs.io
