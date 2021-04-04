@@ -30,7 +30,7 @@ def rip(state: PwnState) -> PwnState:
     for symbol, address in state.leaks.items():
         formatted_leaks[symbol] = hex(address)
 
-    log.info("Searching for libc based on leaks")
+    log.info("Searching for libc based on leaks using libc.rip")
     r = requests.post(URL, json={"symbols": formatted_leaks})
     arutil.debug_requests(r)
     json = r.json()

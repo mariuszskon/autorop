@@ -36,6 +36,12 @@ class TargetFactory(Protocol):
         ...
 
 
+class LibcGetter(Protocol):
+    def __call__(self, state: "PwnState") -> "PwnState":
+        """Perform an operation on the state, likely getting the libc based on leaks."""
+        ...
+
+
 def default_overwriter(t: tube, data: bytes) -> None:
     """Function which writes data via ``t.sendline(data)``"""
     t.sendline(data)
@@ -53,6 +59,11 @@ class PwnState:
     #: for the actual target. This may be called multiple times
     #: to try multiple exploits.
     target_factory: TargetFactory
+
+    #: Which libc acquisition service should be used.
+    #: ``libc.database`` is faster, but requires local installation.
+    #: By default, ``libc.rip``.
+    libc_getter: Optional[LibcGetter] = None
 
     #: Name of vulnerable function in binary,
     #: which we can return to repeatedly.
@@ -89,6 +100,11 @@ class PwnState:
         We also set ``context.binary`` to the given ``binary_name``,
         and ``context.cyclic_size`` to ``context.bytes``.
         """
+        from autorop import libc
+
+        if self.libc_getter is None:
+            self.libc_getter = libc.rip
+
         if self._elf is None:
             self._elf = ELF(self.binary_name)
 
@@ -109,6 +125,7 @@ class PwnState:
         return PwnState(
             binary_name=self.binary_name,
             target_factory=self.target_factory,
+            libc_getter=self.libc_getter,
             vuln_function=self.vuln_function,
             libc_database_path=self.libc_database_path,
             libc=self.libc,
