@@ -4,6 +4,14 @@ autorop.libc package
 Submodules
 ----------
 
+autorop.libc.auto module
+------------------------
+
+.. automodule:: autorop.libc.auto
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 autorop.libc.database module
 ----------------------------
 
