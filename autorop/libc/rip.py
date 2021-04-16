@@ -35,16 +35,46 @@ def rip(state: PwnState) -> PwnState:
     arutil.debug_requests(r)
     json = r.json()
     log.debug(repr(json))
+    #log.info("search libc:" + repr(json))
+    download_id=0
     if len(json) == 0:
         log.error("could not find any matching libc!")
     if len(json) > 1:
-        log.warning(f"{len(json)} matching libc's found, picking first one")
+        log.warning(f"{len(json)} matching libc's found, picking by hand")
+        for x in range(len(json)):
+                print("%2d: %s" % (x, json[x]["id"]))
+        while True:
+            download_id = input("You can choose it by hand\nOr type 'exit' to quit:")
+            print(download_id)
+            if download_id.replace("\r").replace("\n") == "exit" or download_id.replace("\r").replace("\n")  == "quit":
+                sys.exit(0)
+                break
+            try:
+                download_id = int(download_id)
+                break
+            except:
+                continue
 
+    json_d=json[download_id]
     log.info("Downloading libc")
-    r = requests.get(json[0]["download_url"])
+    r = requests.get(json_d["download_url"])
     arutil.debug_requests(r)
-    with open(LIBC_FILE, "wb") as f:
+    print(state.libc_database_path + "/" +  json_d['id'] + ".so",)
+    with open(state.libc_database_path  + "/" + json_d['id'] + ".so", "wb") as f:
         f.write(r.content)
+    print(state.libc_database_path  + "/" + json_d['id'] + ".so download complete")
+    print("Downloading symbols")
+    r = requests.get(json_d["symbols_url"])
+    with open(state.libc_database_path  + "/" + json_d['id'] + ".symbols", "wb") as f:
+        f.write(r.content)
+    with open(state.libc_database_path  + "/" + json_d['id'] + ".info", "wb") as f:
+        f.write(bytes(json_d['id'], encoding = "utf8"))
+    with open(state.libc_database_path  + "/" + json_d['id'] + ".url", "wb") as f:
+        f.write(bytes(json_d["download_url"], encoding = "utf8"))
+    print(json_d['id'] + ".symbols download complete")
+    LIBC_FILE = str(str(state.libc_database_path)  + "//" + str(json_d['id'])+ ".so") 
+
+    print("LIBC_FILE：" + str(LIBC_FILE))
 
     libc = ELF(LIBC_FILE)
     # pick first leak and use that to calculate base
