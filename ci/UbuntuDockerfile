@@ -21,11 +21,12 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /home/tests
 WORKDIR /home/tests
 COPY --from=libc-database-builder /libc-database /root/.libc-database
-COPY ./ci/tests/versions.sh ./ci/tests/lint.sh ./ci/tests/typecheck.sh ./ci/tests/test.sh ./
+COPY ./ci/requirements.txt ./ci/tests/versions.sh ./ci/tests/lint.sh ./ci/tests/typecheck.sh ./ci/tests/test.sh ./
 RUN python3 -m venv /home/venv
 # make docker cache dependencies
 RUN . /home/venv/bin/activate && \
     pip install --upgrade pip && \
-    pip install --upgrade black mypy pytest pytest-rerunfailures coverage pwntools
+    pip install --upgrade black mypy pytest pytest-rerunfailures coverage pwntools && \
+    pip install -r requirements.txt
 COPY . ./
 RUN . /home/venv/bin/activate && pip install .
