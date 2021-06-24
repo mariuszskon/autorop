@@ -4,6 +4,14 @@ autorop.toplevel package
 Submodules
 ----------
 
+autorop.toplevel.Pipe module
+----------------------------
+
+.. automodule:: autorop.toplevel.Pipe
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 autorop.toplevel.Pipeline module
 --------------------------------
 

@@ -4,10 +4,10 @@ autorop.leak package
 Submodules
 ----------
 
-autorop.leak.printf module
+autorop.leak.Printf module
 --------------------------
 
-.. automodule:: autorop.leak.printf
+.. automodule:: autorop.leak.Printf
    :members:
    :undoc-members:
    :show-inheritance:

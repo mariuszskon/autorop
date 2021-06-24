@@ -52,10 +52,26 @@ autorop.arutil.load\_libc module
    :undoc-members:
    :show-inheritance:
 
+autorop.arutil.open\_target module
+----------------------------------
+
+.. automodule:: autorop.arutil.open_target
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 autorop.arutil.pad\_rop module
 ------------------------------
 
 .. automodule:: autorop.arutil.pad_rop
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+autorop.arutil.pretty\_function module
+--------------------------------------
+
+.. automodule:: autorop.arutil.pretty_function
    :members:
    :undoc-members:
    :show-inheritance:

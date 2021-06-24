@@ -75,7 +75,7 @@ See how the below example neatly manages to "downgrade" the problem from somethi
     s.overwriter = send_letter_first
 
     # use base classic pipeline, with printf for leaking
-    pipeline = turnkey.classic(leak=leak.printf())
+    pipeline = turnkey.classic(leak=leak.Printf())
     result = pipeline(s)
 
     # switch to interactive shell which we got via the exploit

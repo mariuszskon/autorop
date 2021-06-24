@@ -40,13 +40,10 @@ class Pipeline:
 
         def reducer(state: PwnState, func: Tuple[int, constants.TYPE_PIPE]) -> PwnState:
             log.debug(repr(state))
-            log.info(f"Pipeline [{func[0]+1}/{len(self.funcs)}]: {func[1].__name__}")
+            log.info(f"Pipeline [{func[0]+1}/{len(self.funcs)}]: {func[1]}")
             return func[1](copy(state))
 
         return reduce(reducer, enumerate(self.funcs), state)
-
-    def __name__(self) -> str:
-        return repr(self)
 
     def __repr__(self) -> str:
         return f"pipeline_instance{self.funcs}"
