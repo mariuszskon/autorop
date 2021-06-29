@@ -70,3 +70,19 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+# -- Automatically generate apidocs ------------------------------------------
+# Based on https://github.com/readthedocs/readthedocs.org/issues/1139#issuecomment-215689182
+
+
+def run_apidoc(_):
+    from sphinx.ext.apidoc import main
+
+    cur_dir = os.path.abspath(os.path.dirname(__file__))
+    output_dir = cur_dir
+    module_dir = os.path.join(cur_dir, "..", "..", "autorop")
+    main(["-f", "-o", output_dir, module_dir])
+
+
+def setup(app):
+    app.connect("builder-inited", run_apidoc)
