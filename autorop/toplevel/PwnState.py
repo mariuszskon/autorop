@@ -62,7 +62,7 @@ class PwnState:
 
     #: Which libc acquisition service should be used.
     #: ``libc.database`` is faster, but requires local installation.
-    #: By default, ``libc.rip``.
+    #: By default, ``libc.Rip``.
     libc_getter: Optional[LibcGetter] = None
 
     #: Name of vulnerable function in binary,
@@ -103,7 +103,7 @@ class PwnState:
         from autorop import libc
 
         if self.libc_getter is None:
-            self.libc_getter = libc.rip
+            self.libc_getter = libc.Rip()
 
         if self._elf is None:
             self._elf = ELF(self.binary_name)

@@ -1,1 +1,1 @@
-from autorop.bof.corefile import corefile
+from autorop.bof.Corefile import Corefile

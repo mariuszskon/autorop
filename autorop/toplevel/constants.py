@@ -11,7 +11,3 @@ CLEAN_TIME = 0.5
 #: (https://ropemporium.com/guide.html#Common%20pitfalls)
 #: and some 32 bit binaries perform ``and esp, 0xfffffff0`` in ``main``
 STACK_ALIGNMENT = 16
-
-#: Type signature of things that can be treated as pipes
-#: i.e. parameters to pipelines, and pipelines themeselves
-TYPE_PIPE = Callable[["PwnState"], "PwnState"]

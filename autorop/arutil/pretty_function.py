@@ -15,5 +15,5 @@ def pretty_function(name: str, args: Iterable[Any]) -> str:
         Textual description of function call to the function name
         with the provided arguments.
     """
-    pretty_args = ", ".join(str(x) for x in args)
+    pretty_args = ", ".join(repr(x) for x in args)
     return f"{name}({pretty_args})"

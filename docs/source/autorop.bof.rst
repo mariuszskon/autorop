@@ -4,10 +4,10 @@ autorop.bof package
 Submodules
 ----------
 
-autorop.bof.corefile module
+autorop.bof.Corefile module
 ---------------------------
 
-.. automodule:: autorop.bof.corefile
+.. automodule:: autorop.bof.Corefile
    :members:
    :undoc-members:
    :show-inheritance:

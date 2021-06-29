@@ -12,10 +12,10 @@ autorop.leak.Printf module
    :undoc-members:
    :show-inheritance:
 
-autorop.leak.puts module
+autorop.leak.Puts module
 ------------------------
 
-.. automodule:: autorop.leak.puts
+.. automodule:: autorop.leak.Puts
    :members:
    :undoc-members:
    :show-inheritance:

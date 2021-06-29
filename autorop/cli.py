@@ -17,6 +17,6 @@ def main() -> None:
         print("Usage: autorop BINARY [HOST PORT]")
         exit()
 
-    result = turnkey.classic()(state)
+    result = turnkey.Classic()(state)
     assert result.target is not None
     result.target.interactive()

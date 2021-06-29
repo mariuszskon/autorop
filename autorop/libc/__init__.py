@@ -1,3 +1,3 @@
-from autorop.libc.auto import auto
-from autorop.libc.rip import rip
-from autorop.libc.database import database
+from autorop.libc.Auto import Auto
+from autorop.libc.Rip import Rip
+from autorop.libc.Database import Database

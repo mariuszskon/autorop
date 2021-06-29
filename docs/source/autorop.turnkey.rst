@@ -4,10 +4,10 @@ autorop.turnkey package
 Submodules
 ----------
 
-autorop.turnkey.classic module
+autorop.turnkey.Classic module
 ------------------------------
 
-.. automodule:: autorop.turnkey.classic
+.. automodule:: autorop.turnkey.Classic
    :members:
    :undoc-members:
    :show-inheritance:

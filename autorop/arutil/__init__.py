@@ -5,5 +5,5 @@ from autorop.arutil.pretty_function import pretty_function
 from autorop.arutil.align_rop import align_rop
 from autorop.arutil.leak_helper import leak_helper
 from autorop.arutil.load_libc import load_libc
-from autorop.arutil.open_target import open_target
+from autorop.arutil.OpenTarget import OpenTarget
 from autorop.arutil.align_call import align_call

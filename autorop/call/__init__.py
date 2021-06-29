@@ -1,2 +1,2 @@
-from autorop.call.custom import custom
-from autorop.call.system_binsh import system_binsh
+from autorop.call.Custom import Custom
+from autorop.call.SystemBinSh import SystemBinSh

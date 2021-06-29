@@ -18,7 +18,7 @@ def test_stop(exploit):
     s.overwriter = send_letter_first
 
     # use base classic pipeline, with printf for leaking
-    pipeline = turnkey.classic(leak=leak.Printf())
+    pipeline = turnkey.Classic(leak=leak.Printf())
     result = pipeline(s)
 
     assert assertion.have_shell(result.target)

@@ -12,7 +12,7 @@ def exploit():
 
     def inner(binary, tube):
         state = PwnState(binary, tube)
-        state.libc_getter = libc.database  # much faster and more reliable
+        state.libc_getter = libc.Database()  # local libc-database
         wrapper.append(state)
         return wrapper[0]
 

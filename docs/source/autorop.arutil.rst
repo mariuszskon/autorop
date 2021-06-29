@@ -4,6 +4,14 @@ autorop.arutil package
 Submodules
 ----------
 
+autorop.arutil.OpenTarget module
+--------------------------------
+
+.. automodule:: autorop.arutil.OpenTarget
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 autorop.arutil.addressify module
 --------------------------------
 
@@ -48,14 +56,6 @@ autorop.arutil.load\_libc module
 --------------------------------
 
 .. automodule:: autorop.arutil.load_libc
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-autorop.arutil.open\_target module
-----------------------------------
-
-.. automodule:: autorop.arutil.open_target
    :members:
    :undoc-members:
    :show-inheritance:

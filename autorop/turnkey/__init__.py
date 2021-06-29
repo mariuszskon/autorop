@@ -1,1 +1,1 @@
-from autorop.turnkey.classic import classic
+from autorop.turnkey.Classic import Classic
