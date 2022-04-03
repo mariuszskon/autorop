@@ -2,7 +2,7 @@
 
 set -e
 
-LIBC_DATABASE_IMAGE="mariuszskon/libc-database:2021.06.23"
+LIBC_DATABASE_IMAGE="mariuszskon/libc-database:2022.04.03"
 
 docker pull $LIBC_DATABASE_IMAGE
 
