@@ -61,8 +61,9 @@ class PwnState:
     target_factory: TargetFactory
 
     #: Which libc acquisition service should be used.
-    #: ``libc.database`` is faster, but requires local installation.
-    #: By default, ``libc.Rip``.
+    #: ``libc.Database`` is faster, but requires local installation.
+    #: Automatically set to ``libc.Database`` if available
+    #: in ``libc_database_path``, otherwise ``libc.Rip``.
     libc_getter: Optional[LibcGetter] = None
 
     #: Name of vulnerable function in binary,
@@ -103,7 +104,10 @@ class PwnState:
         from autorop import libc
 
         if self.libc_getter is None:
-            self.libc_getter = libc.Rip()
+            if os.path.isdir(self.libc_database_path):
+                self.libc_getter = libc.Database()
+            else:
+                self.libc_getter = libc.Rip()
 
         if self._elf is None:
             self._elf = ELF(self.binary_name)
