@@ -82,8 +82,8 @@ See how the below example neatly manages to "downgrade" the problem from somethi
 .. |docs| image:: https://readthedocs.org/projects/autorop/badge/
     :target: https://autorop.readthedocs.io
 
-.. |Test status| image:: https://github.com/mariuszskon/autorop/workflows/autorop%20test/badge.svg
-    :target: https://github.com/mariuszskon/autorop/actions?query=workflow%3A%22autorop+test%22
+.. |Test status| image:: https://github.com/mariuszskon/autorop/workflows/autorop%20test/badge.svg?branch=master
+    :target: https://github.com/mariuszskon/autorop/actions?query=workflow%3A%22autorop+test%22+branch%3Amaster
 
 .. |MIT license| image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://github.com/mariuszskon/autorop/blob/master/LICENSE
