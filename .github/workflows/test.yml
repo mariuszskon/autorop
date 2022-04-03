@@ -1,6 +1,12 @@
 name: autorop test
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # run weekly to aid in narrowing down issue when autorop fails (usually a libc update)
+    - cron: '00 01 * * 4'
 
 jobs:
   build:
