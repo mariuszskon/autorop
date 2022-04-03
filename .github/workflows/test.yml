@@ -18,7 +18,9 @@ jobs:
           # ubuntu:16.04 has python 3.5, while some dependencies need >=3.6
           # ubuntu:18.04 seems to not work on github actions but does locally, FIXXME?
           'ubuntu:20.04',
+          'ubuntu:22.04',
           'debian:10',
+          'debian:11',
         ]
       fail-fast: false  # do not stop other matrix jobs if one fails
 
